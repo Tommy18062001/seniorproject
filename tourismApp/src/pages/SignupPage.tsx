@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -6,10 +7,28 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  async function createUser(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    // pass the date to the server
+    try {
+      await axios.post("/signup", {
+        name,
+        email,
+        password
+      });
+      alert('Registration Successful')
+    } catch (e) {
+      console.log(e);
+      alert("Registration Failed. Please try again");
+    }
+  }
   return (
     <div className="mt-8 h-auto grow flex flex-col items-center justify-around">
       <h1 className="text-2xl text-center mt-16 mb-4">Create an account</h1>
-      <form className="relative max-w-md mx-auto flex flex-col items-center gap-4">
+      <form
+        onSubmit={createUser}
+        className="relative max-w-md mx-auto flex flex-col items-center gap-4"
+      >
         <input
           type="text"
           placeholder="John Doe"

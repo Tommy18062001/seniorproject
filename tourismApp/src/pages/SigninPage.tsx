@@ -1,14 +1,39 @@
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // redirect user if login in
+  const [redirect, setRedirect] = useState(false);
+
+  async function SigninUser(e: { preventDefault: () => void; }) {
+    e.preventDefault();
+
+    try {
+      await axios.post('/signin', {
+        email,
+        password
+      })
+      alert('Login Successfull');
+      setRedirect(true);
+    }
+    catch(e) {
+      alert('Login Failed, Please try again');
+      console.log(e)
+    }
+  }
+
+  if (redirect) {
+    return <Navigate to={'/'}/>
+  }
+
   return (
     <div className="mt-8 h-auto grow flex flex-col items-center justify-around">
       <h1 className="text-2xl text-center mt-16 mb-4">Login</h1>
-      <form className="relative max-w-md mx-auto flex flex-col items-center gap-4">
+      <form className="relative max-w-md mx-auto flex flex-col items-center gap-4" onSubmit={SigninUser}>
         <input
           type="email"
           placeholder="your@email.com"
