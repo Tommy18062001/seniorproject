@@ -2,10 +2,11 @@ import PlaceItem from "../components/PlaceItem";
 import PostItem from "../components/PostItem";
 
 export default function HomePage() {
+
   return (
     <div>
       {/* Introduction */}
-      <div className="w-full h-screen flex flex-col justify-center items-center text-center gap-12 bg-gray-100">
+      <div className="w-full h-screen flex flex-col justify-center items-center text-center gap-12">
         <h1 className="uppercase text-7xl font-bold">Welcome to Fanilo Tour</h1>
         <p>Explore the beauty of toamasina</p>
         <p className="w-1/2">
@@ -17,7 +18,7 @@ export default function HomePage() {
       </div>
 
       {/* Popular destination */}
-      <div className="mx-auto mt-16 w-full text-center">
+      <div id="popularDestination" className="mx-auto mt-16 w-full text-center">
         <h1 className="text-4xl font-semibold mt-2 mb-2">
           Popular Destination
         </h1>
