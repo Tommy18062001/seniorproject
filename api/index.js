@@ -73,12 +73,27 @@ app.post("/signin", async (req, res) => {
         }
       );
     } else {
-      res.json(422).json("password incorrect");
+      res.status(422).json("password incorrect");
     }
   } else {
     res.json("not found");
   }
 })
+
+app.get("/userData", (req, res) => {
+  // in order to use Jwt we need the token 
+  const { token } = req.cookies;
+  
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      const { name, email, _id } = await User.findById(userData.id);
+      res.json({ name, email, _id });
+    });
+  } else {
+    res.json(null);
+  }
+});
 
 app.get('/signup', (req, res) => {
   res.json('ok')
