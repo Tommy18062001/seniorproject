@@ -9,10 +9,10 @@ export default function Header() {
   return (
     <header className="fixed top-0 flex justify-between px-3 py-auto w-full z-50">
       {/* logo */}
-      <div className="flex gap-2 items-center cursor-pointer ml-4">
+      <Link to={"/"} className="flex gap-2 items-center cursor-pointer ml-4">
         <img src={lemur} alt="" className="w-20" />
         <p className="text-xl">Fanilo Tour</p>
-      </div>
+      </Link>
 
       {/* navigation */}
       <nav className="flex gap-1 items-center mr-4">

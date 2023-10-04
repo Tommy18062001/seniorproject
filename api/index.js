@@ -5,12 +5,15 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcryptjs");
 const bcryptSalt = bcrypt.genSaltSync(10);
 
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const jwtSecret = "ksdjflsgjlkgjlsrotz";
 
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+
+const multer = require('multer');
+const fs = require('fs')
 
 dotenv.config();
 // require the models
@@ -40,7 +43,7 @@ app.use(cors(corsOptions));
 
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
-  console.log({name, email, password})
+  console.log({ name, email, password });
   try {
     const userDoc = await User.create({
       name,
@@ -55,7 +58,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/signin", async (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
   const userDoc = await User.findOne({ email });
 
   if (userDoc) {
@@ -78,12 +81,12 @@ app.post("/signin", async (req, res) => {
   } else {
     res.json("not found");
   }
-})
+});
 
 app.get("/userData", (req, res) => {
-  // in order to use Jwt we need the token 
+  // in order to use Jwt we need the token
   const { token } = req.cookies;
-  
+
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
@@ -95,8 +98,36 @@ app.get("/userData", (req, res) => {
   }
 });
 
-app.get('/signup', (req, res) => {
-  res.json('ok')
-})
+app.get("/signout", (req, res) => {
+  // reset the cookie
+  res.cookie("token", "");
+});
+
+const uploadMiddleware = multer({dest: 'uploads/'})
+app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
+  const {originalname, path} = req.file;
+
+  // grab the extension of the file
+  const splittedName = originalname.split('.');
+  const ext = splittedName[splittedName.length - 1];
+
+  const newPath = path + "." + ext;
+  fs.renameSync(path, newPath);
+  res.json(newPath.replace("uploads\\", ""))
+});
+
+app.put("/userData", (req, res) => {
+  const { token } = req.cookies;
+  const {id, name, email, } = req.body;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      const { name, email, _id } = await User.findById(userData.id);
+      res.json({ name, email, _id });
+    });
+  } else {
+    res.json(null);
+  }
+});
 
 app.listen(4000);
