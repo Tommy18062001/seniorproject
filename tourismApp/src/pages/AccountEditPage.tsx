@@ -4,13 +4,15 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export default function AccountEditPage() {
-  const {id} = useParams();
+  const { id } = useParams();
 
   const { user, setUser, ready } = useContext(UserContext);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [profilePic, setProfilePic] = useState("placeholder.png");
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [profilePic, setProfilePic] = useState(user.profilePic);
+
+  const [redirect, setRedirect] = useState(false);
 
   async function saveUser(e: { preventDefault: () => void }) {
     e.preventDefault();
@@ -20,9 +22,16 @@ export default function AccountEditPage() {
           id,
           name,
           email,
-          profilePic
+          profilePic,
         });
-        alert("Profile Updated")
+
+        // update the user info
+        axios.get("/userData").then(({ data }) => {
+          setUser(data);
+        });
+
+        alert("Profile Updated");
+        setRedirect(true);
       } catch (e) {
         console.log(e);
         alert("Update Failed. Please try again");
@@ -42,12 +51,21 @@ export default function AccountEditPage() {
     setProfilePic(filename);
   }
 
+  // if the user info are not fetched yet don't show the page yet
   if (!ready) {
-    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
+    return (
+      <div className="mt-32 w-3/4 mx-auto relative">
+          Loading ... 
+      </div>
+    )
   }
 
-  if (ready && !user) {
+  if (ready && !user && !redirect) {
     return <Navigate to={"/signin"} />;
+  }
+
+  if (redirect) {
+    return <Navigate to={"/"} />
   }
 
   return (
@@ -62,7 +80,7 @@ export default function AccountEditPage() {
         <div className="w-full">
           <label>Upload a Profile Picture</label>
           <img
-            className="my-2 w-40 h-40"
+            className="my-2 w-40 h-40 object-cover"
             src={"http://localhost:4000/uploads/" + profilePic}
             alt=""
           />
@@ -79,7 +97,7 @@ export default function AccountEditPage() {
           <label>Name</label>
           <input
             type="text"
-            value={user.name}
+            defaultValue={user.name}
             onChange={(e) => setName(e.target.value)}
           />{" "}
         </div>
@@ -88,7 +106,7 @@ export default function AccountEditPage() {
           <label>Email Address</label>
           <input
             type="email"
-            value={user.email}
+            defaultValue={user.email}
             onChange={(e) => setEmail(e.target.value)}
           />{" "}
         </div>

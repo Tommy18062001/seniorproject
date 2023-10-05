@@ -12,8 +12,8 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
-const multer = require('multer');
-const fs = require('fs')
+const multer = require("multer");
+const fs = require("fs");
 
 dotenv.config();
 // require the models
@@ -90,40 +90,51 @@ app.get("/userData", (req, res) => {
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
-      const { name, email, _id } = await User.findById(userData.id);
-      res.json({ name, email, _id });
+      const { name, email, _id, profilePic } = await User.findById(userData.id);
+      res.json({ name, email, _id, profilePic });
     });
   } else {
     res.json(null);
   }
 });
 
-app.get("/signout", (req, res) => {
+app.post("/signout", (req, res) => {
   // reset the cookie
-  res.cookie("token", "");
+  res.cookie("token", "").json(true)
 });
 
-const uploadMiddleware = multer({dest: 'uploads/'})
+const uploadMiddleware = multer({ dest: "uploads/" });
 app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
-  const {originalname, path} = req.file;
+  const { originalname, path } = req.file;
 
   // grab the extension of the file
-  const splittedName = originalname.split('.');
+  const splittedName = originalname.split(".");
   const ext = splittedName[splittedName.length - 1];
 
   const newPath = path + "." + ext;
   fs.renameSync(path, newPath);
-  res.json(newPath.replace("uploads\\", ""))
+  res.json(newPath.replace("uploads\\", ""));
 });
 
-app.put("/userData", (req, res) => {
+app.put("/userData", async (req, res) => {
   const { token } = req.cookies;
-  const {id, name, email, } = req.body;
+  const { id, name, email, profilePic } = req.body;
+  console.log(name, email, profilePic)
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
-      const { name, email, _id } = await User.findById(userData.id);
-      res.json({ name, email, _id });
+      const userDoc = await User.findById(userData.id);
+
+      if (userDoc._id == id) {
+        userDoc.set({
+          name: name,
+          email: email,
+          profilePic: profilePic,
+        });
+        await userDoc.save()
+        console.log("we finished here");
+      }
+      res.json("save");
     });
   } else {
     res.json(null);

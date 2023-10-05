@@ -37,7 +37,7 @@ export default function AccountPage() {
     <div className="mt-32 w-3/4 mx-auto relative">
       <div className="grid grid-cols-[1fr_2fr] place-items-center border-b p-4 w-4/5 mx-auto">
         {/* picture */}
-        <img className=" w-40 h-40 rounded-full" src={forest} alt="" />
+        <img className=" w-40 h-40 rounded-full object-cover" src={"http://localhost:4000/uploads/" + user.profilePic} alt="" />
         {/* description */}
         <div className="w-full h-full flex flex-col justify-between p-2">
           <div className="">
@@ -60,8 +60,8 @@ export default function AccountPage() {
               {user.email}
             </p>
           </div>
-          <div className="">
-            <Link className="btn-primary w-32 mr-4" to={"/account/" + user._id}>Edit</Link>
+          <div className="flex gap-2">
+            <Link className="btn-primary w-32 text-center" to={"/account/" + user._id}>Edit</Link>
             <button className="btn-primary w-32" onClick={logoutUser}>Logout</button>
           </div>
         </div>
