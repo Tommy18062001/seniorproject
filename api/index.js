@@ -100,9 +100,10 @@ app.get("/userData", (req, res) => {
 
 app.post("/signout", (req, res) => {
   // reset the cookie
-  res.cookie("token", "").json(true)
+  res.cookie("token", "").json(true);
 });
 
+// user profile Picture Upload
 const uploadMiddleware = multer({ dest: "uploads/" });
 app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
   const { originalname, path } = req.file;
@@ -116,10 +117,24 @@ app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
   res.json(newPath.replace("uploads\\", ""));
 });
 
+// place photos upload
+app.post("/uploadPhotos", uploadMiddleware.array("photos", 50), (req, res) => {
+  const uploadedPhotos = [];
+  for (let i = 0; i < req.files.length; i++) {
+    const { originalname, path } = req.files[i];
+    const splittedName = originalname.split(".");
+    const ext = splittedName[splittedName.length - 1];
+    const newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+    uploadedPhotos.push(newPath.replace("uploads\\", ""));
+  }
+  res.json(uploadedPhotos);
+});
+
 app.put("/userData", async (req, res) => {
   const { token } = req.cookies;
   const { id, name, email, profilePic } = req.body;
-  console.log(name, email, profilePic)
+  console.log(name, email, profilePic);
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
@@ -131,7 +146,7 @@ app.put("/userData", async (req, res) => {
           email: email,
           profilePic: profilePic,
         });
-        await userDoc.save()
+        await userDoc.save();
         console.log("we finished here");
       }
       res.json("save");
