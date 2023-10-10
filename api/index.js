@@ -18,6 +18,7 @@ const fs = require("fs");
 dotenv.config();
 // require the models
 const User = require("./models/User");
+const Place = require("./models/Place");
 
 const corsOptions = {
   origin: true,
@@ -154,6 +155,50 @@ app.put("/userData", async (req, res) => {
   } else {
     res.json(null);
   }
+});
+
+app.post("/newPlace", (req, res) => {
+  const {
+    title,
+    location,
+    lastModified,
+    description,
+    maxGuests,
+    photos,
+    price,
+  } = req.body;
+
+  console.log(title,
+    location,
+    lastModified,
+    description,
+    maxGuests,
+    photos,
+    price)
+
+  const { token } = req.cookies;
+
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+
+    // at this point we should get the user information
+    const placeDoc = await Place.create({
+      owner: userData.id,
+      title,
+      location,
+      photos: photos,
+      lastModified: lastModified,
+      description,
+      maxGuests,
+      price,
+    });
+    res.json(placeDoc);
+  });
+});
+
+app.get("/placeData", async (req, res) => {
+  const placeData = await Place.find();
+  res.json(placeData)
 });
 
 app.listen(4000);

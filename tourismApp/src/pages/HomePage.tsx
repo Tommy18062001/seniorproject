@@ -1,7 +1,26 @@
+import { useEffect, useState } from "react";
 import PlaceItem from "../components/PlaceItem";
 import PostItem from "../components/PostItem";
+import axios from "axios";
 
 export default function HomePage() {
+  const [placeList, setPlaceList] = useState([]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    axios.get("/placeData").then(({ data }) => {
+      setPlaceList(data);
+      setReady(true)
+    });
+  }, []);
+
+  if (!ready) {
+    return (
+      <div className="mt-32 w-3/4 mx-auto relative">
+          Loading ... 
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -24,11 +43,15 @@ export default function HomePage() {
         </h1>
         <h2 className="text-gray-500">A little description</h2>
         {/* list of top 3 destination */}
-        <div className="grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8">
-          <PlaceItem />
-          <PlaceItem />
-          <PlaceItem />
+        <div className="grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8 items-start">
+          {placeList.length > 0 &&
+            placeList.map((place) => (
+              <PlaceItem
+                placeData={place}
+              />
+            ))}
         </div>
+
         <button className="btn-primary">See more</button>
       </div>
 
@@ -72,7 +95,11 @@ export default function HomePage() {
               <input type="email" placeholder="Email" name="email" required />
               <input type="text" placeholder="Subject" name="subject" />
               <textarea name="message"></textarea>
-              <input type="submit" value="Send" className="btn-primary cursor-pointer w-1/3"/>
+              <input
+                type="submit"
+                value="Send"
+                className="btn-primary cursor-pointer w-1/3"
+              />
             </form>
           </div>
           {/* Map */}

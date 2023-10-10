@@ -76,14 +76,14 @@ export default function AccountPage() {
       </div>
       {/* navigation  */}
       <div className="border-t border-gray-400 w-4/5 mx-auto p-4 relative grid grid-cols-3 gap-4">
-        <div className={navigationStyling}>
+        <Link to={"/account/places/new"} className={navigationStyling}>
           <AddCircleOutlineIcon className="w-10"/>
 
           <h1 className="text-2xl">Add Place</h1>
           <p className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit
           </p>
-        </div>
+        </Link>
 
         <div className={navigationStyling}>
           <svg
