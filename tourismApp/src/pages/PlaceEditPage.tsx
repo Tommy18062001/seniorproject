@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function PlaceEditPage() {
+  const { id } = useParams();
   const { user, ready } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
 
@@ -13,6 +14,22 @@ export default function PlaceEditPage() {
   const [maxGuests, setMaxGuests] = useState(5);
   const [photos, setPhotos] = useState([]);
   const [price, setPrice] = useState(25000);
+  const [rating, setRating] = useState(4);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    axios.get("/placeData/" + id).then(({ data }) => {
+      setTitle(data.title);
+      setLocation(data.location);
+      setDescription(data.description);
+      setMaxGuests(data.maxGuests);
+      setPhotos(data.photos);
+      setPrice(data.price);
+      setRating(data.rating);
+    });
+  }, [id]);
 
   async function uploadPics(e: { target: { files: any } }) {
     const files = e.target.files;
@@ -28,30 +45,33 @@ export default function PlaceEditPage() {
     setPhotos(filenames);
   }
 
-  async function createPlace(e: { preventDefault: () => void }) {
+  async function savePlace(e: { preventDefault: () => void }) {
     e.preventDefault();
-    try {
-      const timeofsubmission = new Date(document.lastModified);
-      const lastModified =
-        timeofsubmission.toLocaleDateString() +
-        " " +
-        timeofsubmission.toLocaleTimeString("en-US");
+    const timeofsubmission = new Date(document.lastModified);
+    const lastModified =
+      timeofsubmission.toLocaleDateString() +
+      " " +
+      timeofsubmission.toLocaleTimeString("en-US");
 
-      console.log(timeofsubmission);
-      await axios.post("/newPlace", {
-        title,
-        location,
-        lastModified,
-        description,
-        maxGuests,
-        photos,
-        price,
-      });
+    const placeData = {
+      title,
+      location,
+      lastModified,
+      description,
+      maxGuests,
+      photos,
+      price,
+      rating,
+    };
+
+    if (id) {
+      await axios.put("/editPlace/" + id, placeData);
+      alert("Place Edited Successfully");
+      setRedirect(true);
+    } else {
+      await axios.post("/newPlace", placeData);
       alert("Place Added Successfully");
       setRedirect(true);
-    } catch (e) {
-      console.log(e);
-      alert("There was a problem. Please try again");
     }
   }
 
@@ -64,7 +84,7 @@ export default function PlaceEditPage() {
   }
 
   if (redirect) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/account/places"} />;
   }
 
   return (
@@ -72,7 +92,7 @@ export default function PlaceEditPage() {
       <h1 className="text-2xl mx-auto mb-8 w-full text-center">
         Add New Place
       </h1>
-      <form className="flex flex-col items-center" onSubmit={createPlace}>
+      <form className="flex flex-col items-center" onSubmit={savePlace}>
         {/* title */}
         <div className="w-full mt-4">
           <label>Title</label>
@@ -151,6 +171,16 @@ export default function PlaceEditPage() {
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
+
+        <div className="w-full mt-4">
+          <label>Rating</label>
+          <input
+            type="number"
+            placeholder="Rating"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
           />
         </div>
         <button className="btn-primary w-2/4 mt-6">Submit</button>

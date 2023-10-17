@@ -1,18 +1,49 @@
-import { useState } from "react";
-import forest from "../assets/forest.jpg";
+import { useEffect, useState } from "react";
 import BookingTrip from "../components/BookingTrip";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import RatingWidget from "../components/RatingWidget";
 
 export default function PlacePage() {
   const [showPhotos, setshowPhotos] = useState(false);
+  const [place, setPlace] = useState(null);
+  const [ready, setReady] = useState(false);
+
+  const { id } = useParams();
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    axios.get("/placeData/" + id).then(({ data }) => {
+      setPlace(data);
+      setReady(true);
+    });
+  }, [id]);
+
+  if (!ready) {
+    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
+  }
 
   // if showphoto is true, display the list of photos
   if (showPhotos) {
     return (
-      <div className="absolute top-0 left-0 h-full min-w-full z-50 flex gap-8 justify-center items-center bg-white">
-        <button>Back</button>
-        <img className="rounded-md w-2/4 h-auto" src={forest} alt="" />
-        <button>Forward</button>
-        <button className="absolute top-6 right-10 btn-primary" onClick={() => setshowPhotos(false)}>Close</button>
+      <div className="absolute top-0 left-0 h-auto min-w-full z-50 flex gap-8 justify-center items-center bg-white">
+        <div className="w-full h-auto flex flex-col items-center justify-center gap-2 mt-32 mb-16">
+          {place.photos.length > 0 &&
+            place.photos.map((photo) => (
+              <img
+                className="rounded-md w-3/4 max-w-2xl h-[361px] object-cover"
+                src={"http://localhost:4000/uploads/" + photo}
+                alt={photo}
+              />
+            ))}
+        </div>
+        <button
+          className="fixed top-6 right-10 btn-primary"
+          onClick={() => setshowPhotos(false)}
+        >
+          Close
+        </button>
       </div>
     );
   }
@@ -20,56 +51,71 @@ export default function PlacePage() {
   return (
     <div className="mt-32 w-3/4 mx-auto min-h-screen">
       {/* place headline */}
-      <h1>This is the place page</h1>
+      <h1 className="text-4xl">{place.title}</h1>
       <div>
-        <p>Stars</p>
-        <p>Adress of the place</p>
+        <RatingWidget rating={place.rating} />
+        <p> {place.location} </p>
       </div>
 
       {/* image display */}
       <div className="grid grid-cols-[2fr_1fr] gap-2 mt-8 relative">
-        <div>
-          <img className="rounded-md h-full" src={forest} alt="" />
+        <div className="w-full h-[424px] relative">
+          <img
+            className="rounded-md w-full h-full object-cover"
+            src={"http://localhost:4000/uploads/" + place.photos[0]}
+            alt=""
+          />
         </div>
-        <div className="grid gap-2">
-          <img className="rounded-md" src={forest} alt="" />
-          <img className="rounded-md" src={forest} alt="" />
+        <div className="grid gap-2 w-full">
+          <img
+            className="rounded-md w-full h-52 object-cover"
+            src={"http://localhost:4000/uploads/" + place.photos[1]}
+            alt=""
+          />
+          <img
+            className="rounded-md w-full h-52 object-cover"
+            src={"http://localhost:4000/uploads/" + place.photos[2]}
+            alt=""
+          />
         </div>
-        <button
-          className="absolute bottom-2 left-2 bg-white rounded-full px-6 py-2"
-          onClick={() => setshowPhotos(true)}
-        >
-          See more
-        </button>
+        {place.photos.length > 3 && (
+          <button
+            className="absolute bottom-2 left-2 bg-white rounded-full px-6 py-2"
+            onClick={() => setshowPhotos(true)}
+          >
+            See more
+          </button>
+        )}
       </div>
 
       {/* More info and pricing */}
       <div className="grid grid-cols-[2fr_1fr] gap-2 mt-8">
         <div className="p-2">
           <div>
-            <div>
-              <h2>Hosted By</h2>
+            <div className="mb-4">
+              <h2 className="text-sm">Hosted By</h2>
               <p>Tommy Sylver</p>
             </div>
-            <div>
-              <h2>Last modified</h2>
-              <p>26/09/2023</p>
+            <div className="mb-4">
+              <h2 className="text-sm flex gap-1 items-center">Last modified</h2>
+              <p>{place.lastModified}</p>
             </div>
-            <div>
-              <h2>Cancellation Process</h2>
+            <div className="mb-4">
+              <h2 className="text-sm">Cancellation Process</h2>
               <p>Within 48 hours</p>
             </div>
           </div>
 
           <section className="mt-8">
             <h2 className="text-2xl mb-2">Description</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur
-              accusantium fugit totam reiciendis, ea neque porro delectus autem
-              cumque itaque sed doloribus? Commodi molestiae magnam dolore
-              excepturi eveniet veniam ab.
-            </p>
+            <p>{place.description}</p>
           </section>
+
+          <section className="mt-8">
+            <h2 className="text-2xl mb-2">Additional Information</h2>
+            <p>{place.description}</p>
+          </section>
+
           <section className="mt-8">
             <h2 className="text-2xl mb-2">Perks</h2>
             <ul>
@@ -81,7 +127,7 @@ export default function PlacePage() {
         </div>
 
         {/* booking Trip */}
-        <BookingTrip />
+        <BookingTrip placeData={place} />
       </div>
     </div>
   );

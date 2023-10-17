@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
-
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import {BsCardChecklist} from 'react-icons/bs';
+import {AiOutlineAppstoreAdd} from 'react-icons/ai';
 
 export default function AccountPage() {
   const { user, setUser, ready } = useContext(UserContext);
@@ -77,34 +77,20 @@ export default function AccountPage() {
       {/* navigation  */}
       <div className="border-t border-gray-400 w-4/5 mx-auto p-4 relative grid grid-cols-3 gap-4">
         <Link to={"/account/places/new"} className={navigationStyling}>
-          <AddCircleOutlineIcon className="w-10"/>
-
+          <AiOutlineAppstoreAdd className="text-4xl" />
           <h1 className="text-2xl">Add Place</h1>
           <p className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit
           </p>
         </Link>
 
-        <div className={navigationStyling}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-10 h-10"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-            />
-          </svg>
-          <h1 className="text-2xl">Bookings</h1>
+        <Link to={"/account/places"} className={navigationStyling}>
+          <BsCardChecklist className="text-4xl" />
+          <h1 className="text-2xl">All places</h1>
           <p className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit
           </p>
-        </div>
+        </Link>
 
         <div className={navigationStyling}>
           <svg

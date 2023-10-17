@@ -166,15 +166,16 @@ app.post("/newPlace", (req, res) => {
     maxGuests,
     photos,
     price,
+    rating,
   } = req.body;
 
-  console.log(title,
-    location,
-    lastModified,
-    description,
-    maxGuests,
-    photos,
-    price)
+  // console.log(title,
+  //   location,
+  //   lastModified,
+  //   description,
+  //   maxGuests,
+  //   photos,
+  //   price)
 
   const { token } = req.cookies;
 
@@ -191,6 +192,7 @@ app.post("/newPlace", (req, res) => {
       description,
       maxGuests,
       price,
+      rating: rating,
     });
     res.json(placeDoc);
   });
@@ -198,7 +200,54 @@ app.post("/newPlace", (req, res) => {
 
 app.get("/placeData", async (req, res) => {
   const placeData = await Place.find();
-  res.json(placeData)
+  res.json(placeData);
+});
+
+app.get("/placeData/:id", async (req, res) => {
+  const { id } = req.params;
+  const placeData = await Place.findById(id);
+  res.json(placeData);
+});
+
+app.put("/editPlace/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    title,
+    location,
+    lastModified,
+    description,
+    maxGuests,
+    photos,
+    price,
+    rating,
+  } = req.body;
+  const { token } = req.cookies;
+
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const placeDoc = await Place.findById(id);
+
+    if (userData.id === placeDoc.owner.toString()) {
+      placeDoc.set({
+        title,
+        location,
+        photos: photos,
+        lastModified: lastModified,
+        description,
+        maxGuests,
+        price,
+        rating: rating,
+      });
+      await placeDoc.save();
+      res.json(placeDoc);
+    }
+  });
+});
+
+app.delete("/placeData/:id", async (req, res) => {
+  const { id } = req.params;
+  const placeData = await Place.deleteOne({ _id: id });
+  res.status(202).json("Place Deleted Successfully");
 });
 
 app.listen(4000);
