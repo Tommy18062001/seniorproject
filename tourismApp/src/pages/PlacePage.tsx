@@ -3,11 +3,16 @@ import BookingTrip from "../components/BookingTrip";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import RatingWidget from "../components/RatingWidget";
+import ReviewItem from "../components/ReviewItem";
 
 export default function PlacePage() {
   const [showPhotos, setshowPhotos] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+
   const [place, setPlace] = useState(null);
-  const [ready, setReady] = useState(false);
+  const [reviews, setReviews] = useState(null);
+  const [placeReady, setPlaceReady] = useState(false);
+  const [reviewsReady, setReviewsReady] = useState(false);
 
   const { id } = useParams();
   useEffect(() => {
@@ -16,11 +21,16 @@ export default function PlacePage() {
     }
     axios.get("/placeData/" + id).then(({ data }) => {
       setPlace(data);
-      setReady(true);
+      setPlaceReady(true);
+    });
+
+    axios.get("/reviewData/" + id).then(({ reviewData }) => {
+      setReviews(reviewData);
+      setReviewsReady(true);
     });
   }, [id]);
 
-  if (!ready) {
+  if (!placeReady || !reviewsReady) {
     return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
   }
 
@@ -117,12 +127,37 @@ export default function PlacePage() {
           </section>
 
           <section className="mt-8">
-            <h2 className="text-2xl mb-2">Perks</h2>
-            <ul>
-              <li>FT</li>
-              <li>FT</li>
-              <li>FT</li>
-            </ul>
+            <h2 className="text-2xl mb-2">Reviews</h2>
+            {/* <div>
+              {reviews.length > 0 &&
+                reviews.map((review) => <ReviewItem reviewData={review} />)}
+            </div> */}
+            {reviews ? (
+              <div>
+                {reviews.length > 0 &&
+                  reviews.map((review) => <ReviewItem reviewData={review} />)}
+              </div>
+            ) : (
+              <div>
+                <h3>There is no reviews</h3>
+              </div>
+            )}
+
+            {showReviewForm ? (
+              <form className="mt-4">
+                <textarea name="reviewText" className="h-16 max-h-48"></textarea>
+                <button className="bg-primary px-3 py-2 text-white text-sm rounded-2xl">
+                  Submit Review
+                </button>
+              </form>
+            ) : (
+              <button
+                className="bg-primary px-3 py-2 text-white text-sm mt-4 rounded-2xl"
+                onClick={() => setShowReviewForm(true)}
+              >
+                Add Reviews
+              </button>
+            )}
           </section>
         </div>
 

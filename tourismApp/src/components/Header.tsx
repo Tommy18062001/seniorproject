@@ -16,8 +16,8 @@ export default function Header() {
 
       {/* navigation */}
       <nav className="flex gap-1 items-center mr-4">
-        <Link to={"/"} className="mr-4">
-          My bookings
+        <Link to={"/destinations"} className="mr-4">
+          Explore Destinations
         </Link>
         <span>|</span>
         {user ? (

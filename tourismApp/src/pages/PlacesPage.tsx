@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PlaceItem from "../components/PlaceItem";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { MdFormatListNumbered } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 export default function PlacesPage() {

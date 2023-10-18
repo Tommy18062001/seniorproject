@@ -19,6 +19,7 @@ dotenv.config();
 // require the models
 const User = require("./models/User");
 const Place = require("./models/Place");
+const Review = require("./models/Review");
 
 const corsOptions = {
   origin: true,
@@ -248,6 +249,13 @@ app.delete("/placeData/:id", async (req, res) => {
   const { id } = req.params;
   const placeData = await Place.deleteOne({ _id: id });
   res.status(202).json("Place Deleted Successfully");
+});
+
+// reviews endpoints
+app.get("/reviewData/:id", async (req, res) => {
+  const { id } = req.params;
+  const reviewData = await Review.find({ placeId: id });
+  res.json(reviewData);
 });
 
 app.listen(4000);
