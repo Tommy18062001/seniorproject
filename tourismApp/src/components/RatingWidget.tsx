@@ -1,6 +1,6 @@
 import { FaStar } from "react-icons/fa";
 
-export default function RatingWidget({ rating }: number) {
+export default function RatingWidget({ rating, isreview = false }) {
   let stars = [];
 
   [...Array(rating)].map((e, i) =>
@@ -19,6 +19,10 @@ export default function RatingWidget({ rating }: number) {
         </span>
       )
     );
+  }
+
+  if (isreview) {
+    return <div className="flex gap-1 text-xs mt-1">{stars}</div>;
   }
 
   return <div className="my-4 flex gap-1">{stars}</div>;

@@ -100,6 +100,12 @@ app.get("/userData", (req, res) => {
   }
 });
 
+app.get("/userData/:id", async (req, res) => {
+  const { id } = req.params;
+  const userData = await User.findById(id);
+  res.json(userData);
+});
+
 app.post("/signout", (req, res) => {
   // reset the cookie
   res.cookie("token", "").json(true);
@@ -257,5 +263,30 @@ app.get("/reviewData/:id", async (req, res) => {
   const reviewData = await Review.find({ placeId: id });
   res.json(reviewData);
 });
+
+app.post("/newReview", (req, res) => {
+  const {
+    id,
+    reviewText,
+    lastModified, 
+    rating
+  } = req.body;
+
+  const { token } = req.cookies;
+
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const reviewDoc = await Review.create({
+      owner: userData.id,
+      placeId: id,
+      lastModified,
+      reviewText,
+      rating: parseInt(rating),
+    });
+    res.json(reviewDoc);
+  });
+});
+
+
 
 app.listen(4000);

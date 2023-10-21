@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import BookingTrip from "../components/BookingTrip";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -10,26 +10,52 @@ export default function PlacePage() {
   const [showReviewForm, setShowReviewForm] = useState(false);
 
   const [place, setPlace] = useState(null);
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [placeReady, setPlaceReady] = useState(false);
   const [reviewsReady, setReviewsReady] = useState(false);
+
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState("");
+
+  const ratingStyle =
+    "cursor-pointer flex items-center justify-center w-7 h-7 text-sm border border-gray-500 rounded-full peer-checked:bg-[#31343c] peer-checked:text-white";
 
   const { id } = useParams();
   useEffect(() => {
     if (!id) {
       return;
     }
+
     axios.get("/placeData/" + id).then(({ data }) => {
       setPlace(data);
       setPlaceReady(true);
     });
 
-    axios.get("/reviewData/" + id).then(({ reviewData }) => {
-      setReviews(reviewData);
+    axios.get("/reviewData/" + id).then((reviewData) => {
+      setReviews(reviewData.data);
       setReviewsReady(true);
     });
   }, [id]);
 
+  async function saveReview(e: { preventDefault: () => void }) {
+    e.preventDefault();
+
+    const timeofsubmission = new Date(document.lastModified);
+    const lastModified =
+      timeofsubmission.toLocaleDateString() +
+      " " +
+      timeofsubmission.toLocaleTimeString("en-US");
+
+    const reviewData = {
+      id,
+      reviewText,
+      lastModified,
+      rating,
+    };
+
+    await axios.post("/newReview", reviewData);
+    alert("Review Added Successfully");
+  }
   if (!placeReady || !reviewsReady) {
     return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
   }
@@ -125,45 +151,99 @@ export default function PlacePage() {
             <h2 className="text-2xl mb-2">Additional Information</h2>
             <p>{place.description}</p>
           </section>
-
-          <section className="mt-8">
-            <h2 className="text-2xl mb-2">Reviews</h2>
-            {/* <div>
-              {reviews.length > 0 &&
-                reviews.map((review) => <ReviewItem reviewData={review} />)}
-            </div> */}
-            {reviews ? (
-              <div>
-                {reviews.length > 0 &&
-                  reviews.map((review) => <ReviewItem reviewData={review} />)}
-              </div>
-            ) : (
-              <div>
-                <h3>There is no reviews</h3>
-              </div>
-            )}
-
-            {showReviewForm ? (
-              <form className="mt-4">
-                <textarea name="reviewText" className="h-16 max-h-48"></textarea>
-                <button className="bg-primary px-3 py-2 text-white text-sm rounded-2xl">
-                  Submit Review
-                </button>
-              </form>
-            ) : (
-              <button
-                className="bg-primary px-3 py-2 text-white text-sm mt-4 rounded-2xl"
-                onClick={() => setShowReviewForm(true)}
-              >
-                Add Reviews
-              </button>
-            )}
-          </section>
         </div>
 
         {/* booking Trip */}
         <BookingTrip placeData={place} />
       </div>
+      <section className="mt-8">
+        <h2 className="text-2xl mb-2">Reviews</h2>
+        {reviews ? (
+          <div>
+            {reviews.length > 0 &&
+              reviews.map((review) => <ReviewItem reviewData={review} />)}
+          </div>
+        ) : (
+          <div>
+            <h3>There is no reviews</h3>
+          </div>
+        )}
+
+        {showReviewForm ? (
+          <form className="mt-4" onSubmit={saveReview}>
+            <textarea
+              name="reviewText"
+              className="h-16 max-h-48"
+              placeholder="Write your review"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+            />
+            <div className="flex gap-2 mb-4 items-center">
+              <label>Rating: </label>
+              <label>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={1}
+                  className="hidden peer"
+                  onChange={(e) => setRating(e.target.value)}
+                />
+                <div className={ratingStyle}>1</div>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={2}
+                  className="hidden peer"
+                  onChange={(e) => setRating(e.target.value)}
+                />
+                <div className={ratingStyle}>2</div>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={3}
+                  className="hidden peer"
+                  onChange={(e) => setRating(e.target.value)}
+                />
+                <div className={ratingStyle}>3</div>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={4}
+                  className="hidden peer"
+                  onChange={(e) => setRating(e.target.value)}
+                />
+                <div className={ratingStyle}>4</div>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={5}
+                  className="hidden peer"
+                  onChange={(e) => setRating(e.target.value)}
+                />
+                <div className={ratingStyle}>5</div>
+              </label>
+            </div>
+            <button className="bg-primary px-3 py-2 text-white text-sm rounded-2xl">
+              Submit Review
+            </button>
+          </form>
+        ) : (
+          <button
+            className="bg-primary px-3 py-2 text-white text-sm mt-4 rounded-2xl"
+            onClick={() => setShowReviewForm(true)}
+          >
+            Add Reviews
+          </button>
+        )}
+      </section>
     </div>
   );
 }

@@ -22,6 +22,7 @@ export default function PlaceItem({ placeData, isList = false }) {
       }
     }
   }
+
   if (isList) {
     if (redirect) {
       return <Navigate to={""} />;
@@ -83,7 +84,12 @@ export default function PlaceItem({ placeData, isList = false }) {
         </div>
       </div>
       <p className="text-gray-700 text-sm mt-2 text-start px-2">
-        {placeData.description}
+        {placeData.description.length > 140
+          ? placeData.description.substring(0, 140) + " ..."
+          : placeData.description}
+      </p>
+      <p className="text-xs mt-4 text-start px-2">
+        {placeData.lastModified}
       </p>
     </Link>
   );
