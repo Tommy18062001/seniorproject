@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BookingTrip from "../components/BookingTrip";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -156,6 +156,8 @@ export default function PlacePage() {
         {/* booking Trip */}
         <BookingTrip placeData={place} />
       </div>
+
+      {/* review section */}
       <section className="mt-8">
         <h2 className="text-2xl mb-2">Reviews</h2>
         {reviews ? (

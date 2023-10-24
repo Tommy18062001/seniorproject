@@ -20,6 +20,7 @@ dotenv.config();
 const User = require("./models/User");
 const Place = require("./models/Place");
 const Review = require("./models/Review");
+const Booking = require("./models/Booking")
 
 const corsOptions = {
   origin: true,
@@ -92,8 +93,10 @@ app.get("/userData", (req, res) => {
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
-      const { name, email, _id, profilePic } = await User.findById(userData.id);
-      res.json({ name, email, _id, profilePic });
+      const { name, email, _id, profilePic, isAdmin } = await User.findById(
+        userData.id
+      );
+      res.json({ name, email, _id, profilePic, isAdmin });
     });
   } else {
     res.json(null);
@@ -265,12 +268,7 @@ app.get("/reviewData/:id", async (req, res) => {
 });
 
 app.post("/newReview", (req, res) => {
-  const {
-    id,
-    reviewText,
-    lastModified, 
-    rating
-  } = req.body;
+  const { id, reviewText, lastModified, rating } = req.body;
 
   const { token } = req.cookies;
 
@@ -287,6 +285,22 @@ app.post("/newReview", (req, res) => {
   });
 });
 
+// booking -----------------------------------------------------
+app.post("/newBooking", (req, res) => {
+  const { id, date, guests, lastModified } = req.body;
+  const { token } = req.cookies;
 
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const bookingDoc = await Booking.create({
+      owner: userData.id,
+      placeId: id,
+      selectedDate: date,
+      guests,
+      lastModified,
+    });
+    res.json(bookingDoc);
+  });
+});
 
 app.listen(4000);
