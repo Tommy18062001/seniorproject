@@ -7,6 +7,7 @@ const BookingSchema = new Schema({
   lastModified: String,
   selectedDate: String,
   guests: Number,
+  price: Number
 });
 
 const BookingModel = mongoose.model("Booking", BookingSchema);

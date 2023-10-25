@@ -287,7 +287,7 @@ app.post("/newReview", (req, res) => {
 
 // booking -----------------------------------------------------
 app.post("/newBooking", (req, res) => {
-  const { id, date, guests, lastModified } = req.body;
+  const { id, date, guests, lastModified, price } = req.body;
   const { token } = req.cookies;
 
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -298,9 +298,16 @@ app.post("/newBooking", (req, res) => {
       selectedDate: date,
       guests,
       lastModified,
+      price
     });
     res.json(bookingDoc);
   });
+});
+
+app.get("/bookingData/:id", async (req, res) => {
+  const { id } = req.params;
+  const bookingData = await Booking.find({owner: id})
+  res.json(bookingData);
 });
 
 app.listen(4000);
