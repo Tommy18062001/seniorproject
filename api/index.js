@@ -298,11 +298,35 @@ app.post("/newBooking", (req, res) => {
       selectedDate: date,
       guests,
       lastModified,
-      price
+      price,
+      isCancelled: false
     });
     res.json(bookingDoc);
   });
 });
+
+app.put("/bookingData/:id", async (req, res) => {
+  const { id} = req.params;
+  const { token } = req.cookies;
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      const userDoc = await User.findById(userData.id);
+      const bookingDoc = await Booking.findById(id)
+  
+      if (userDoc._id == bookingDoc.owner.toString()) {
+        bookingDoc.set({
+          isCancelled: true
+        });
+        await bookingDoc.save();
+      }
+      res.json("Booking Cancelled");
+    });
+  } else {
+    res.json(null);
+  }
+})
 
 app.get("/bookingData/:id", async (req, res) => {
   const { id } = req.params;
