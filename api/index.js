@@ -213,6 +213,11 @@ app.get("/placeData", async (req, res) => {
   res.json(placeData);
 });
 
+app.get("/reviewData", async (req, res) => {
+  const reviewData = await Review.find();
+  res.json(reviewData);
+});
+
 app.get("/placeData/:id", async (req, res) => {
   const { id } = req.params;
   const placeData = await Place.findById(id);

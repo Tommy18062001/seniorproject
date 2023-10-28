@@ -2,24 +2,28 @@ import { useEffect, useState } from "react";
 import PlaceItem from "../components/PlaceItem";
 import PostItem from "../components/PostItem";
 import axios from "axios";
+import ReviewItem from "../components/ReviewItem";
 
 export default function HomePage() {
   const [placeList, setPlaceList] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [ready, setReady] = useState(false);
+  const [reviewsReady, setReviewsReady] = useState(false);
 
   useEffect(() => {
     axios.get("/placeData").then(({ data }) => {
       setPlaceList(data);
-      setReady(true)
+      setReady(true);
+    });
+
+    axios.get("/reviewData").then((reviewData) => {
+      setReviews(reviewData.data);
+      setReviewsReady(true);
     });
   }, []);
 
-  if (!ready) {
-    return (
-      <div className="mt-32 w-3/4 mx-auto relative">
-          Loading ... 
-      </div>
-    )
+  if (!ready || !reviewsReady) {
+    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
   }
 
   return (
@@ -45,11 +49,7 @@ export default function HomePage() {
         {/* list of top 3 destination */}
         <div className="grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8 items-start">
           {placeList.length > 0 &&
-            placeList.map((place) => (
-              <PlaceItem
-                placeData={place}
-              />
-            ))}
+            placeList.map((place) => <PlaceItem placeData={place} />)}
         </div>
 
         <button className="btn-primary">See more</button>
@@ -72,7 +72,12 @@ export default function HomePage() {
         <h1 className="text-4xl font-semibold mt-2 mb-2">Customer reviews</h1>
         <h2 className="text-gray-500">We provide affordable price</h2>
         {/* Display the reviews of the customers */}
-        <div className="grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8"></div>
+        <div className="flex items-center gap-4 mt-8 relative bg-green-400 w-full relative">
+          {reviews.length > 0 &&
+            reviews.map((review) => (
+              <ReviewItem reviewData={review} isTestimonials={true} />
+            ))}
+        </div>
       </div>
 
       {/* Contact information */}

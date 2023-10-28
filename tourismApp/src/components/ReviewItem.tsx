@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import RatingWidget from "./RatingWidget";
 import { BiTime } from "react-icons/bi";
 
-export default function ReviewItem({ reviewData }) {
+export default function ReviewItem({ reviewData, isTestimonials = false }) {
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
 
@@ -32,6 +32,25 @@ export default function ReviewItem({ reviewData }) {
 
   if (!ready) {
     return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
+  }
+
+  if (isTestimonials) {
+    return (
+      <div className="p-2 my-4 border border-gray-400 rounded-xl cursor-pointer w-[700px]">
+        <div className="flex flex-col gap-2 items-center w-full mb-2">
+          <img
+            className="w-12 h-12 rounded-full object-cover"
+            src={"http://localhost:4000/uploads/" + user.profilePic}
+            alt={user.profilePic}
+          />
+          <section>
+            <h1 className="font-bold">{user.name}</h1>
+            <RatingWidget rating={reviewData.rating} isreview={true} />
+          </section>
+        </div>
+        <p className="text-sm mt-4 mb-2">{reviewData.reviewText}</p>
+      </div>
+    );
   }
 
   return (
