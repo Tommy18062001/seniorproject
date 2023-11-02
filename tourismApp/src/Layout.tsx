@@ -4,11 +4,12 @@ import Footer from "./components/Footer";
 import { useState } from "react";
 
 export default function Layout() {
+    const [isScrolled, setIsScrolled] = useState(false);
 
     return (
         <div className="">
-            <Header/>
-            <Outlet />
+            <Header isScrolled={isScrolled}/>
+            <Outlet context={[isScrolled, setIsScrolled]} />
             <Footer />
         </div>
     )

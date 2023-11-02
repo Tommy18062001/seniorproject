@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BookingTrip from "../components/BookingTrip";
-import { useParams } from "react-router-dom";
+import { Link, useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
 import RatingWidget from "../components/RatingWidget";
 import ReviewItem from "../components/ReviewItem";
+import LoadingWidget from "../components/LoadingWidget";
+import { UserContext } from "../UserContext";
 
 export default function PlacePage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+
+  const { user } = useContext(UserContext);
+
   const [showPhotos, setshowPhotos] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
@@ -33,7 +40,7 @@ export default function PlacePage() {
 
     axios.get("/reviewData/" + id).then((reviewData) => {
       setReviews(reviewData.data);
-      setReviewsReady(true);
+      setTimeout(() => setReviewsReady(true), 3000);
     });
   }, [id]);
 
@@ -57,7 +64,7 @@ export default function PlacePage() {
     alert("Review Added Successfully");
   }
   if (!placeReady || !reviewsReady) {
-    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
+    return <LoadingWidget />;
   }
 
   // if showphoto is true, display the list of photos
@@ -238,12 +245,28 @@ export default function PlacePage() {
             </button>
           </form>
         ) : (
-          <button
-            className="bg-primary px-3 py-2 text-white text-sm mt-4 rounded-2xl"
-            onClick={() => setShowReviewForm(true)}
-          >
-            Add Reviews
-          </button>
+          <>
+            {user ? (
+              <button
+                className="bg-primary px-3 py-2 text-white text-sm mt-4 rounded-2xl"
+                onClick={() => setShowReviewForm(true)}
+              >
+                Add Reviews
+              </button>
+            ) : (
+              <>
+                <p className="text-sm text-gray-600 mt-6 w-full">
+                  Sign in to add review
+                </p>
+                <Link
+                  to={"/signin"}
+                  className="block text-center btn-primary w-max my-2"
+                >
+                  Sign In
+                </Link>
+              </>
+            )}
+          </>
         )}
       </section>
     </div>

@@ -68,23 +68,27 @@ export default function PlaceItem({ placeData, isList = false }) {
   return (
     <Link
       to={"/place/" + placeData._id}
-      className=" flex flex-col items-start mb-2 max-w-sm"
+      className=" flex flex-col items-start mb-2 max-w-sm w-full h-full overflow-hidden relative"
     >
-      <img
-        className="w-full h-52 object-cover"
-        src={"http://localhost:4000/uploads/" + placeData.photos[0]}
-        alt={placeData.photos[0]}
-      />
-      <div className="w-full flex justify-between mt-2">
-        <h1 className="text-lg px-2">{placeData.title}</h1>
-        <div className="flex gap-2">
-          <p className="px-2 border border-gray-500">Travel</p>
-          <p className="px-2 border border-gray-500">Animal</p>
+      <picture className="w-full h-full relative before:absolute before:bg-black before:opacity-20 before:h-full before:w-full before:left-0 hover:before:opacity-30">
+        <img
+          className="w-full h-full object-cover"
+          src={"http://localhost:4000/uploads/" + placeData.photos[0]}
+          alt={placeData.photos[0]}
+        />
+      </picture>
+      <div className="absolute top-0 left-0 w-full h-full px-2 pb-4 text-white hover:-translate-y-11 transition duration-500 flex flex-col justify-end">
+        <div className="w-full flex justify-between mt-2">
+          <h1 className="text-lg">{placeData.title}</h1>
+          <div className="flex gap-2">
+            <p className="px-2 border border-white">Travel</p>
+            <p className="px-2 border border-white">Animal</p>
+          </div>
         </div>
+        <p className="text-white text-sm mt-2 text-start truncate">
+          {placeData.description}
+        </p>
       </div>
-      <p className="text-gray-700 text-sm mt-2 text-start px-2">
-        {placeData.description}
-      </p>
     </Link>
   );
 }

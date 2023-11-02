@@ -213,6 +213,16 @@ app.get("/placeData", async (req, res) => {
   res.json(placeData);
 });
 
+app.get("/placeData/top", async (req, res) => {
+  const placeData = await Place.find();
+  // placeData.sort(function(a, b) {
+  //   return b.rating-a.rating;
+  // })
+  res.json(placeData.sort(function(a, b) {
+    return b.rating-a.rating;
+  }));
+});
+
 app.get("/reviewData", async (req, res) => {
   const reviewData = await Review.find();
   res.json(reviewData);

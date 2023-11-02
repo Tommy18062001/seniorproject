@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 export default function SignupPage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

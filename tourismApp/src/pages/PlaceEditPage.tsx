@@ -1,9 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
+import LoadingWidget from "../components/LoadingWidget";
 
 export default function PlaceEditPage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+  
   const { id } = useParams();
   const { user, ready } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
@@ -76,7 +80,7 @@ export default function PlaceEditPage() {
   }
 
   if (!ready) {
-    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
+    return <LoadingWidget />;
   }
 
   if (ready && !user && !redirect) {

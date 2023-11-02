@@ -2,9 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PlaceItem from "../components/PlaceItem";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 export default function PlacesPage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+  
   const [places, setPlaces] = useState([]);
   const [ready, setReady] = useState(false);
 

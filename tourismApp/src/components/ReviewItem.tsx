@@ -36,19 +36,19 @@ export default function ReviewItem({ reviewData, isTestimonials = false }) {
 
   if (isTestimonials) {
     return (
-      <div className="p-2 my-4 border border-gray-400 rounded-xl cursor-pointer w-[700px]">
-        <div className="flex flex-col gap-2 items-center w-full mb-2">
+      <div className="w-full h-[200px] flex flex-col items-center justify-center gap-6 mb-4 relative">
+        <p className="text-xl mt-4 mb-2 w-3/4">{reviewData.reviewText}</p>
+        <div className="flex gap-2 justify-center items-center w-full mb-2 relative">
           <img
             className="w-12 h-12 rounded-full object-cover"
             src={"http://localhost:4000/uploads/" + user.profilePic}
             alt={user.profilePic}
           />
-          <section>
-            <h1 className="font-bold">{user.name}</h1>
+          <section className="h-full text-left">
+            <h1 className="">{user.name}</h1>
             <RatingWidget rating={reviewData.rating} isreview={true} />
           </section>
         </div>
-        <p className="text-sm mt-4 mb-2">{reviewData.reviewText}</p>
       </div>
     );
   }

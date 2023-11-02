@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useOutletContext } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export default function SigninPage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // redirect user if login in
@@ -34,7 +37,7 @@ export default function SigninPage() {
   }
 
   return (
-    <div className="mt-8 h-auto grow flex flex-col items-center justify-around">
+    <div className="mt-24 h-auto grow flex flex-col items-center justify-around">
       <h1 className="text-2xl text-center mt-16 mb-4">Login</h1>
       <form
         className="relative max-w-md mx-auto flex flex-col items-center gap-4"

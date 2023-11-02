@@ -1,13 +1,16 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useOutletContext } from "react-router-dom";
 import { BsCardChecklist } from "react-icons/bs";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { GiBlackBook } from "react-icons/gi";
 import {BiCalendarEvent} from 'react-icons/bi'
 
 export default function AccountPage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+  
   const { user, setUser, ready } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
 
@@ -113,7 +116,7 @@ export default function AccountPage() {
             </p>
           </Link>
 
-          <Link to={"/account/events"} className={navigationStyling}>
+          <Link to={"https://www.facebook.com/FANILOTOURS"} target="_blank" className={navigationStyling}>
             <BiCalendarEvent className="text-4xl" />
             <h1 className="text-2xl">Events</h1>
             <p className="text-sm">

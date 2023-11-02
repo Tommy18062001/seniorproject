@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useOutletContext, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 export default function AccountEditPage() {
+  const [isScrolled, setIsScrolled] = useOutletContext();
+  setIsScrolled(true);
+  
   const { id } = useParams();
 
   const { user, setUser, ready } = useContext(UserContext);

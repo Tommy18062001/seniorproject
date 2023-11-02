@@ -5,7 +5,8 @@ import { LiaTimesSolid } from "react-icons/lia";
 import { TbEdit } from "react-icons/tb";
 import { BsCalendarCheck } from "react-icons/bs";
 import { ImCancelCircle, ImPriceTags } from "react-icons/im";
-import {FaUsers} from 'react-icons/fa'
+import { FaUsers } from "react-icons/fa";
+import { BarLoader } from "react-spinners";
 
 export default function BookingItem({ bookingData }) {
   const [place, setPlace] = useState(null);
@@ -74,7 +75,9 @@ export default function BookingItem({ bookingData }) {
   }
 
   if (!ready) {
-    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
+    return (
+      <div className="mb-4 h-44 w-full flex justify-start items-start px-4 py-2"></div>
+    );
   }
 
   return (
