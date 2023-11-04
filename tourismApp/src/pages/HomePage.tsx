@@ -117,7 +117,7 @@ export default function HomePage() {
             and fauna, and magnificent scenery! Our experienced Malagasy guides
             are fluent in English, French, Italian and German
           </p>
-          <Link to={"/"} className="block btn-primary w-max">
+          <Link to={"/aboutus"} className="block btn-primary w-max">
             Learn More
           </Link>
         </div>
@@ -126,7 +126,7 @@ export default function HomePage() {
       {/* What we do */}
       {/* Posts and eents */}
       <div className="mx-auto mt-32 w-full text-center">
-        <h1 className="text-4xl font-semibold mt-2 mb-2">What We do</h1>
+        <h1 className="text-4xl font-semibold mt-2 mb-2">Why us</h1>
         <h2 className="text-gray-500">Never miss any updates and offers</h2>
         {/* Display the reviews of the customers */}
         <div className="grid grid-cols-1 place-items-center sm:grid-cols-3 gap-8 m-8 mt-16">
