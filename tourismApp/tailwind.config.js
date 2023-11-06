@@ -5,7 +5,16 @@ export default {
     extend: {
       backgroundImage: {
         "customer-review": "url('/src/assets/review.jpg')",
-      }
+      },
+      keyframes: {
+        borderAnimation: {
+          "0%": { width: "0px" },
+          "100%": { width: "50px" },
+        },
+      },
+      animation: {
+        borderAnimation: "borderAnimation 0.5s ease-in-out",
+      },
     },
   },
   plugins: [],
