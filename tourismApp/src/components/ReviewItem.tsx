@@ -36,8 +36,10 @@ export default function ReviewItem({ reviewData, isTestimonials = false }) {
 
   if (isTestimonials) {
     return (
-      <div className="w-full h-[200px] flex flex-col items-center justify-center gap-6 mb-4 relative">
-        <p className="text-xl mt-4 mb-2 w-3/4">{reviewData.reviewText}</p>
+      <div
+        className=" mx-auto px-4 py-2 h-[200px] flex flex-col items-center justify-center gap-6 mb-4 relative"
+      >
+        <p className="text-xl mt-4 mb-2 w-3/4 px-4 py-2">{reviewData.reviewText}</p>
         <div className="flex gap-2 justify-center items-center w-full mb-2 relative">
           <img
             className="w-12 h-12 rounded-full object-cover"

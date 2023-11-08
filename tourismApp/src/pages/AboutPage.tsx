@@ -4,10 +4,27 @@ import { RiTeamLine } from "react-icons/ri";
 import { BiNetworkChart } from "react-icons/bi";
 import { HiInformationCircle } from "react-icons/hi";
 import Tour from "../components/Tour";
+import { CiLocationOn, CiMail } from "react-icons/ci";
+import { BsTelephoneInbound } from "react-icons/bs";
+
+import emailjs from "@emailjs/browser";
 
 export default function AboutPage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
   setIsScrolled(true);
+
+  function sendEmail(e) {
+    e.preventDefault();
+
+    emailjs.sendForm(
+      "service_9uphv2k",
+      "template_2hjte5w",
+      e.target,
+      "Ws1Bqh3AZ0IiHcEI_"
+    );
+
+    alert("submitted");
+  }
   return (
     <div className="mt-32 w-4/5 mx-auto relative">
       {/* the title */}
@@ -53,7 +70,7 @@ export default function AboutPage() {
           are fluent in English, French, Italian and German
         </p>
         {/* <img src={tree} alt="team" className="w-4/5 h-auto object-cover" /> */}
-        <ul className="w-full relative list-none grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ul className=" w-full relative list-none grid grid-cols-1 lg:grid-cols-2 gap-4 place-items-center">
           <Tour
             title="Toamasina Tour"
             description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere,
@@ -121,20 +138,32 @@ export default function AboutPage() {
           {/* Contact form */}
           <div className="w-1/2">
             <div className="flex flex-col items-start">
+              <h1 className="logoFont text-4xl mb-2">Fanilo Tour</h1>
               <ul className=" text-start">
-                <li>Lot 170 parcelle 22/31 Tanamborozano</li>
-                <li>johantony@hotmail.com</li>
-                <li>034 08 880 10</li>
+                <li className="flex gap-2 items-center mb-2">
+                  <CiLocationOn />
+                  <span className="text-sm">
+                    Lot 170 parcelle 22/31 Tanamborozano
+                  </span>
+                </li>
+                <li className="flex gap-2 items-center mb-2">
+                  <CiMail />
+                  <span className="text-sm">johantony@hotmail.com</span>
+                </li>
+                <li className="flex gap-2 items-center mb-2">
+                  <BsTelephoneInbound />
+                  <span className="text-sm">034 08 880 10</span>{" "}
+                </li>
               </ul>
             </div>
-            <form className="mt-8">
+            <form className="mt-2" onSubmit={sendEmail}>
               <input type="text" placeholder="Name" name="name" required />
-              <input type="email" placeholder="Email" name="email" required />
+              <input type="email" placeholder="Email" name="from_email" required />
               <input type="text" placeholder="Subject" name="subject" />
               <textarea name="message"></textarea>
               <input
                 type="submit"
-                value="Send"
+                value="Send Message"
                 className="btn-primary cursor-pointer"
               />
             </form>

@@ -48,7 +48,7 @@ export default function DestinationsPage() {
           </li>
         </ul>
       </div>
-      <div className="grid gap-2 grid-cols-3">
+      <div className="grid gap-4 grid-cols-3">
         {places.length > 0 &&
           places.map((place) => (
             <DestinationItem placeData={place} isList={false} />

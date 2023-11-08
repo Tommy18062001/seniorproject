@@ -3,15 +3,19 @@ import { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ImPriceTags } from "react-icons/im";
 import { UserContext } from "../UserContext";
+import emailjs from "@emailjs/browser";
 
-export default function BookingTrip({ placeData }) {
+export default function BookingTrip({ placeData, userData }) {
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState(1);
   const { id } = useParams();
 
   const { user } = useContext(UserContext);
 
-  async function bookTrip(e: { preventDefault: () => void }) {
+  async function bookTrip(e: {
+    preventDefault: () => void;
+    target: string | HTMLFormElement;
+  }) {
     e.preventDefault();
 
     const timeofsubmission = new Date(document.lastModified);
@@ -31,6 +35,14 @@ export default function BookingTrip({ placeData }) {
     };
 
     await axios.post("/newBooking", bookingData);
+
+    emailjs.sendForm(
+      "service_9uphv2k",
+      "template_5l7zo7s",
+      e.target,
+      "Ws1Bqh3AZ0IiHcEI_"
+    );
+
     alert("Booking Done Successfully");
   }
   return (
@@ -48,6 +60,10 @@ export default function BookingTrip({ placeData }) {
         </p>
       </div>
       <form onSubmit={bookTrip}>
+        <input type="text" name="from_name" value={userData.name} hidden />
+        <input type="email" name="from_email" value={userData.email} hidden />
+        <input type="text" name="place" value={placeData.title} hidden />
+
         <div className="mb-4 text-md">
           <label className="block">Date</label>
           <input
@@ -72,12 +88,16 @@ export default function BookingTrip({ placeData }) {
           <button className="btn-primary w-full mx-auto my-4">Book Trip</button>
         ) : (
           <>
-          <p className="text-sm text-gray-600 mt-6 w-full text-center">Please Sign In in order to book a trip</p>
-          <Link to={"/signin"} className="block text-center btn-primary w-3/4 mx-auto my-4">
-            Sign In  
-          </Link>
+            <p className="text-sm text-gray-600 mt-6 w-full text-center">
+              Please Sign In in order to book a trip
+            </p>
+            <Link
+              to={"/signin"}
+              className="block text-center btn-primary w-3/4 mx-auto my-4"
+            >
+              Sign In
+            </Link>
           </>
-          
         )}
       </form>
     </div>

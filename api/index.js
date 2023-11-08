@@ -20,7 +20,7 @@ dotenv.config();
 const User = require("./models/User");
 const Place = require("./models/Place");
 const Review = require("./models/Review");
-const Booking = require("./models/Booking")
+const Booking = require("./models/Booking");
 
 const corsOptions = {
   origin: true,
@@ -218,9 +218,11 @@ app.get("/placeData/top", async (req, res) => {
   // placeData.sort(function(a, b) {
   //   return b.rating-a.rating;
   // })
-  res.json(placeData.sort(function(a, b) {
-    return b.rating-a.rating;
-  }));
+  res.json(
+    placeData.sort(function (a, b) {
+      return b.rating - a.rating;
+    })
+  );
 });
 
 app.get("/reviewData", async (req, res) => {
@@ -314,25 +316,26 @@ app.post("/newBooking", (req, res) => {
       guests,
       lastModified,
       price,
-      isCancelled: false
+      isCancelled: false,
     });
     res.json(bookingDoc);
   });
 });
 
-app.put("/bookingData/:id", async (req, res) => {
-  const { id} = req.params;
+// update the booking status
+app.put("/bookingStatus/:id", async (req, res) => {
+  const { id } = req.params;
   const { token } = req.cookies;
 
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
       const userDoc = await User.findById(userData.id);
-      const bookingDoc = await Booking.findById(id)
-  
+      const bookingDoc = await Booking.findById(id);
+
       if (userDoc._id == bookingDoc.owner.toString()) {
         bookingDoc.set({
-          isCancelled: true
+          isCancelled: true,
         });
         await bookingDoc.save();
       }
@@ -341,11 +344,53 @@ app.put("/bookingData/:id", async (req, res) => {
   } else {
     res.json(null);
   }
-})
+});
 
+// update the booking information
+app.put("/bookingData/:id", async (req, res) => {
+  const { date, guests, lastModified, price } = req.body;
+  const { id } = req.params;
+  const { token } = req.cookies;
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      const userDoc = await User.findById(userData.id);
+      const bookingDoc = await Booking.findById(id);
+
+      if (userDoc._id == bookingDoc.owner.toString()) {
+        bookingDoc.set({
+          selectedDate: date,
+          lastModified: lastModified,
+          guests,
+          price,
+        });
+        await bookingDoc.save();
+      }
+      res.json("Booking Information Updated");
+    });
+  } else {
+    res.json(null);
+  }
+});
+
+app.delete("/bookingData/:id", async (req, res) => {
+  const { id } = req.params;
+  const bookingsData = await Booking.deleteOne({ _id: id });
+  res.status(202).json("Booking Deleted Successfully");
+});
+
+// get the list of booking depending on the owner/user
+app.get("/bookingsData/:id", async (req, res) => {
+  const { id } = req.params;
+  const bookingsData = await Booking.find({ owner: id });
+  res.json(bookingsData);
+});
+
+// get a specific booking with its ID
 app.get("/bookingData/:id", async (req, res) => {
   const { id } = req.params;
-  const bookingData = await Booking.find({owner: id})
+  const bookingData = await Booking.findOne({ _id: id });
   res.json(bookingData);
 });
 

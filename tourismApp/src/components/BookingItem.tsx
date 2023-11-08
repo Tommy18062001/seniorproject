@@ -6,13 +6,18 @@ import { TbEdit } from "react-icons/tb";
 import { BsCalendarCheck } from "react-icons/bs";
 import { ImCancelCircle, ImPriceTags } from "react-icons/im";
 import { FaUsers } from "react-icons/fa";
-import { BarLoader } from "react-spinners";
+import { BiTrashAlt } from "react-icons/bi";
 
 export default function BookingItem({ bookingData }) {
   const [place, setPlace] = useState(null);
   const [ready, setReady] = useState(false);
 
   let cancellationStatus;
+
+  //check the status of the booking
+  let bookingStatus;
+  let bookingStatusStyle;
+  let textDisplay;
 
   const bookingDate = new Date(bookingData.lastModified);
   const appointment = new Date(bookingData.selectedDate);
@@ -43,7 +48,8 @@ export default function BookingItem({ bookingData }) {
 
     if (id) {
       try {
-        await axios.put("/bookingData/" + id);
+        await axios.put("/bookingStatus/" + id);
+        bookingStatus = "Cancelled"
         alert("Booking Cancelled");
       } catch (e) {
         console.log(e);
@@ -52,10 +58,21 @@ export default function BookingItem({ bookingData }) {
     }
   }
 
-  //check the status of the booking
-  let bookingStatus;
-  let bookingStatusStyle;
-  let textDisplay;
+  async function deleteBooking(id: string, event) {
+    event.preventDefault();
+
+    if (id) {
+      try {
+        await axios.delete("/bookingData/" + id);
+        // remove it from the DOM
+        document.getElementById(bookingData._id)?.remove();
+        alert("Booking Deleted");
+      } catch (e) {
+        console.log(e);
+        alert("There was an error. Please try again");
+      }
+    }
+  }
 
   if (bookingData.isCancelled) {
     bookingStatus = "Cancelled";
@@ -81,9 +98,9 @@ export default function BookingItem({ bookingData }) {
   }
 
   return (
-    <Link
-      to={bookingStatus == "Closed" ? "" : "/place/" + bookingData._id}
-      className="grid grid-cols-4 grid-rows-2 gap-4 mb-4 h-44 w-full relative p-2 border border-gray-400"
+    <div
+      id={bookingData._id}
+      className="grid grid-cols-4 grid-rows-2 gap-4 mb-4 h-44 w-full relative p-2 border border-gray-400 cursor-pointer"
     >
       <img
         className="w-full h-full object-cover col-start-1 row-span-3"
@@ -109,23 +126,30 @@ export default function BookingItem({ bookingData }) {
         </div>
       </div>
       <div className="flex gap-2 items-start justify-end col-start-4">
-        <p className={bookingStatusStyle}>{bookingStatus}</p>
-        {bookingStatus == "Closed" ? (
+        <p id={bookingData.placeId} className={bookingStatusStyle}>
+          {bookingStatus}
+        </p>
+        {bookingStatus == "Closed" || bookingStatus == "Cancelled" ? (
           <>
             <Link
-              to={"/"}
+              to={""}
               className="p-2 border border-gray-500 rounded-full text-lg text-gray-500"
             >
               <TbEdit />
             </Link>
-            <button className="p-2 border border-gray-500 rounded-full text-lg text-gray-500">
-              <LiaTimesSolid />
+            <button
+              className="p-2 border border-gray-500 rounded-full text-lg"
+              onClick={(event) => {
+                deleteBooking(bookingData._id, event);
+              }}
+            >
+              <BiTrashAlt />
             </button>
           </>
         ) : (
           <>
             <Link
-              to={"/"}
+              to={"/account/bookings/edit/"+bookingData._id}
               className="p-2 border border-gray-500 rounded-full text-lg"
             >
               <TbEdit />
@@ -141,6 +165,6 @@ export default function BookingItem({ bookingData }) {
           </>
         )}
       </div>
-    </Link>
+    </div>
   );
 }

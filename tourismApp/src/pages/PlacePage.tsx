@@ -161,7 +161,7 @@ export default function PlacePage() {
         </div>
 
         {/* booking Trip */}
-        <BookingTrip placeData={place} />
+        <BookingTrip placeData={place} userData={user} />
       </div>
 
       {/* review section */}

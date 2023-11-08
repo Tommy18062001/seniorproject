@@ -6,10 +6,11 @@ import ReviewItem from "../components/ReviewItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useInView } from "react-intersection-observer";
 
-import { BsShieldCheck } from "react-icons/bs";
+import {BsShieldCheck } from "react-icons/bs";
 
 import forest from "../assets/forest.jpg";
 import fanilo from "../assets/fanilo.jpg";
+import image from "../assets/image.jpg";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -20,7 +21,8 @@ import LoadingWidget from "../components/LoadingWidget";
 
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { LiaAccessibleIcon } from "react-icons/lia";
-import {RxActivityLog} from 'react-icons/rx'
+import { RxActivityLog } from "react-icons/rx";
+import { BiSolidQuoteRight } from "react-icons/bi";
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
@@ -123,6 +125,23 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Popular destination */}
+      <div id="popularDestination" className="mx-auto mt-32 w-full text-center">
+        <h1 className="text-4xl font-semibold mt-2 mb-2">
+          Popular Destination
+        </h1>
+        <h2 className="text-gray-500">A little description</h2>
+        {/* list of top 3 destination */}
+        <div className="relative grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8 items-start h-[400px]">
+          {placeList.length > 0 &&
+            placeList
+              .slice(0, 3)
+              .map((place) => <PlaceItem placeData={place} />)}
+        </div>
+
+        <button className="btn-primary">See more</button>
+      </div>
+
       {/* What we do */}
       {/* Posts and eents */}
       <div className="mx-auto mt-32 w-full text-center">
@@ -161,23 +180,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Popular destination */}
-      <div id="popularDestination" className="mx-auto mt-32 w-full text-center">
-        <h1 className="text-4xl font-semibold mt-2 mb-2">
-          Popular Destination
-        </h1>
-        <h2 className="text-gray-500">A little description</h2>
-        {/* list of top 3 destination */}
-        <div className="relative grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8 items-start h-[400px]">
-          {placeList.length > 0 &&
-            placeList
-              .slice(0, 3)
-              .map((place) => <PlaceItem placeData={place} />)}
-        </div>
-
-        <button className="btn-primary">See more</button>
-      </div>
-
       {/* Testimonial destination */}
       <div className="mx-auto mt-32 w-full text-center">
         <h1 className="text-4xl font-semibold mt-2 mb-2">Customer reviews</h1>
@@ -199,13 +201,30 @@ export default function HomePage() {
           >
             {reviews.length > 0 &&
               reviews.map((review) => (
-                <SwiperSlide className="px-2 py-5 mt-4">
+                <SwiperSlide className="px-2 py-5 mt-4 flex flex-col justify-center items-center">
+                  <BiSolidQuoteRight className="text-center text-4xl" />
                   <ReviewItem reviewData={review} isTestimonials={true} />
                 </SwiperSlide>
               ))}
           </Swiper>
         </div>
-      </div>      
+      </div>
+
+      <div className="w-5/6 h-auto mt-32 grid grid-cols-1 lg:grid-cols-2 relative justify-items-center mx-auto">
+        <section className="flex flex-col justify-center items-start">
+          <h1 className="text-4xl mb-8">Get in touch</h1>
+          <p className="w-full mb-6">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Consequatur, iusto facilis. Odit minima illo dolores exercitationem
+            quo laboriosam commodi inventore quaerat cumque possimus libero
+            blanditiis doloremque, quidem, deserunt ratione placeat.
+          </p>
+          <Link to={"/aboutus"} className="block btn-primary w-max">
+            Send a message
+          </Link>
+        </section>
+        <img src={image} alt="image" className=" max-w-[350px] h-auto" />
+      </div>
     </div>
   );
 }
