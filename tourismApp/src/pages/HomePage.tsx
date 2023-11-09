@@ -52,7 +52,7 @@ export default function HomePage() {
 
     axios.get("/reviewData").then((reviewData) => {
       setReviews(reviewData.data);
-      setTimeout(() => setReviewsReady(true), 2000);
+      setTimeout(() => setReviewsReady(true), 1000);
     });
   }, []);
 

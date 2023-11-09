@@ -4,6 +4,9 @@ import { Navigate, useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
 import LoadingWidget from "../components/LoadingWidget";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function PlaceEditPage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
   setIsScrolled(true);
@@ -70,12 +73,30 @@ export default function PlaceEditPage() {
 
     if (id) {
       await axios.put("/editPlace/" + id, placeData);
-      alert("Place Edited Successfully");
-      setRedirect(true);
+      toast.success("Place Edited Successfully", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => setRedirect(true), 2000)
     } else {
       await axios.post("/newPlace", placeData);
-      alert("Place Added Successfully");
-      setRedirect(true);
+      toast.success("Place Added Successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => setRedirect(true), 2500)
     }
   }
 
@@ -189,6 +210,7 @@ export default function PlaceEditPage() {
         </div>
         <button className="btn-primary w-2/4 mt-6">Submit</button>
       </form>
+      <ToastContainer />
     </div>
   );
 }

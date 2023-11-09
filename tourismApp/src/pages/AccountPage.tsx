@@ -98,7 +98,7 @@ export default function AccountPage() {
             </p>
           </Link>
 
-          <Link to={"/account/places"} className={navigationStyling}>
+          <Link to={"/account/bookings"} className={navigationStyling}>
             <GiBlackBook className="text-4xl" />
             <h1 className="text-2xl">Bookings</h1>
             <p className="text-sm">

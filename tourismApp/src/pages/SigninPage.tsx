@@ -3,6 +3,9 @@ import { useContext, useState } from "react";
 import { Link, Navigate, useOutletContext } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function SigninPage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
   setIsScrolled(true);
@@ -22,13 +25,31 @@ export default function SigninPage() {
         email,
         password,
       });
+
       setUser(data);
-      console.log(data);
-      alert("Login Successfull");
-      setRedirect(true);
+      toast.success("Login success", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => setRedirect(true), 3000)
     } catch (e) {
-      alert("Login Failed, Please try again");
       console.log(e);
+      toast.error("Login Failed, Please try again", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   }
 
@@ -63,6 +84,7 @@ export default function SigninPage() {
           </Link>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 }

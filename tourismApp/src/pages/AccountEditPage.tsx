@@ -3,10 +3,13 @@ import { useContext, useState } from "react";
 import { Link, Navigate, useOutletContext, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function AccountEditPage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
   setIsScrolled(true);
-  
+
   const { id } = useParams();
 
   const { user, setUser, ready } = useContext(UserContext);
@@ -33,11 +36,29 @@ export default function AccountEditPage() {
           setUser(data);
         });
 
-        alert("Profile Updated");
-        setRedirect(true);
+        toast.success("Profile Updated", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setTimeout(() => setRedirect(true), 2000);
       } catch (e) {
         console.log(e);
-        alert("Update Failed. Please try again");
+        toast.error("Update Failed. Please try again", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   }
@@ -56,11 +77,7 @@ export default function AccountEditPage() {
 
   // if the user info are not fetched yet don't show the page yet
   if (!ready) {
-    return (
-      <div className="mt-32 w-3/4 mx-auto relative">
-          Loading ... 
-      </div>
-    )
+    return <div className="mt-32 w-3/4 mx-auto relative">Loading ...</div>;
   }
 
   if (ready && !user && !redirect) {
@@ -68,7 +85,7 @@ export default function AccountEditPage() {
   }
 
   if (redirect) {
-    return <Navigate to={"/"} />
+    return <Navigate to={"/account"} />;
   }
 
   return (
@@ -116,6 +133,7 @@ export default function AccountEditPage() {
 
         <button className="btn-primary w-3/4 mt-4">Save Changes</button>
       </form>
+      <ToastContainer />
     </div>
   );
 }

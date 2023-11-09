@@ -380,6 +380,12 @@ app.delete("/bookingData/:id", async (req, res) => {
   res.status(202).json("Booking Deleted Successfully");
 });
 
+// get the list of all bookings made
+app.get("/bookingsData", async (req, res) => {
+  const bookingsData = await Booking.find();
+  res.json(bookingsData);
+});
+
 // get the list of booking depending on the owner/user
 app.get("/bookingsData/:id", async (req, res) => {
   const { id } = req.params;

@@ -7,6 +7,9 @@ import Tour from "../components/Tour";
 import { CiLocationOn, CiMail } from "react-icons/ci";
 import { BsTelephoneInbound } from "react-icons/bs";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import emailjs from "@emailjs/browser";
 
 export default function AboutPage() {
@@ -23,7 +26,18 @@ export default function AboutPage() {
       "Ws1Bqh3AZ0IiHcEI_"
     );
 
-    alert("submitted");
+    toast.success("Message Sent successfull", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
+    document.getElementById("messageForm").reset();
   }
   return (
     <div className="mt-32 w-4/5 mx-auto relative">
@@ -156,7 +170,7 @@ export default function AboutPage() {
                 </li>
               </ul>
             </div>
-            <form className="mt-2" onSubmit={sendEmail}>
+            <form className="mt-2" onSubmit={sendEmail} id="messageForm">
               <input type="text" placeholder="Name" name="name" required />
               <input type="email" placeholder="Email" name="from_email" required />
               <input type="text" placeholder="Subject" name="subject" />
@@ -180,6 +194,8 @@ export default function AboutPage() {
           ></iframe>
         </div>
       </section>
+
+      <ToastContainer />
     </div>
   );
 }

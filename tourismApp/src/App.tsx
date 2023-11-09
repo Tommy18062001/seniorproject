@@ -33,6 +33,7 @@ function App() {
           <Route path="/account/places" element={<PlacesPage />} />
           <Route path="/account/places/new" element={<PlaceEditPage />} />
           <Route path="/account/places/edit/:id" element={<PlaceEditPage />} />
+          <Route path="/account/bookings/" element={<BookingsPage isUserAdmin={true}/>} />
           <Route path="/account/bookings/:id" element={<BookingsPage />} />
           <Route path="/account/bookings/edit/:id" element={<BookingEditPage />} />
           <Route path="/place/:id" element={<PlacePage />} />

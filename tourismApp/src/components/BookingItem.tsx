@@ -7,10 +7,13 @@ import { BsCalendarCheck } from "react-icons/bs";
 import { ImCancelCircle, ImPriceTags } from "react-icons/im";
 import { FaUsers } from "react-icons/fa";
 import { BiTrashAlt } from "react-icons/bi";
+import { AiOutlineUser } from "react-icons/ai";
 
-export default function BookingItem({ bookingData }) {
+export default function BookingItem({ bookingData, isUserAdmin=false }) {
   const [place, setPlace] = useState(null);
+  const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
+  const [placeReady, setPlaceReady] = useState(false);
 
   let cancellationStatus;
 
@@ -36,12 +39,16 @@ export default function BookingItem({ bookingData }) {
     if (!bookingData.placeId) {
       return;
     }
+    axios.get("/userData/"+ bookingData.owner).then(({ data }) => {
+      setUser(data);
+      setReady(true);
+    });
 
     axios.get("/placeData/" + bookingData.placeId).then(({ data }) => {
       setPlace(data);
-      setReady(true);
+      setPlaceReady(true);
     });
-  }, [bookingData.placeId]);
+  }, [bookingData.placeId, bookingData.owner]);
 
   async function cancelBooking(id: string, event) {
     event.preventDefault();
@@ -49,7 +56,7 @@ export default function BookingItem({ bookingData }) {
     if (id) {
       try {
         await axios.put("/bookingStatus/" + id);
-        bookingStatus = "Cancelled"
+        bookingStatus = "Cancelled";
         alert("Booking Cancelled");
       } catch (e) {
         console.log(e);
@@ -91,7 +98,7 @@ export default function BookingItem({ bookingData }) {
     textDisplay = "flex gap-2 items-center text-sm mb-2 pl-1";
   }
 
-  if (!ready) {
+  if (!ready || !placeReady) {
     return (
       <div className="mb-4 h-44 w-full flex justify-start items-start px-4 py-2"></div>
     );
@@ -119,6 +126,10 @@ export default function BookingItem({ bookingData }) {
               | <FaUsers /> Guests: {bookingData.guests}
             </span>
           </p>
+          {isUserAdmin && (<p className="text-md flex gap-2 items-center w-max pl-1 pr-2 mb-2">
+            <AiOutlineUser />{" "}
+            <span className="text-sm">Added By: {user.name}</span>
+          </p>)}
           <p className="text-md flex gap-2 items-center bg-primary text-white w-max pl-1 pr-2">
             <ImPriceTags /> <span className="text-sm">Total Price: </span> Ar{" "}
             {bookingData.price}
@@ -149,7 +160,7 @@ export default function BookingItem({ bookingData }) {
         ) : (
           <>
             <Link
-              to={"/account/bookings/edit/"+bookingData._id}
+              to={"/account/bookings/edit/" + bookingData._id}
               className="p-2 border border-gray-500 rounded-full text-lg"
             >
               <TbEdit />
