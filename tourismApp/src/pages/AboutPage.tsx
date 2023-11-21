@@ -36,7 +36,7 @@ export default function AboutPage() {
     }
   }, []);
 
-  function sendEmail(e) {
+  function sendEmail(e: { preventDefault: () => void; target: string | HTMLFormElement; }) {
     e.preventDefault();
 
     emailjs.sendForm(
@@ -217,9 +217,8 @@ export default function AboutPage() {
           {/* Map */}
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7582.151981709474!2d49.39379803639575!3d-18.160413014442867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x21f50031040daf03%3A0xb45d4ec9b2579ea1!2sTanamborozano%2C%20Toamasina!5e0!3m2!1sfr!2smg!4v1695015186302!5m2!1sfr!2smg"
-            allowfullscreen=""
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerPolicy="no-referrer-when-downgrade"
             className="border border-gray-400 w-full h-[350px] sm:w-[600px] sm:h-[450px]"
           ></iframe>
         </div>

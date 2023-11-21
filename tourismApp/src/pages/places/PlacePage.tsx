@@ -6,6 +6,8 @@ import RatingWidget from "../../components/RatingWidget";
 import ReviewItem from "../../components/ItemComponent/ReviewItem";
 import LoadingWidget from "../../components/LoadingWidget";
 import { UserContext } from "../../UserContext";
+import { PlaceInterface } from "../../Interfaces";
+
 
 export default function PlacePage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
@@ -16,7 +18,7 @@ export default function PlacePage() {
   const [showPhotos, setshowPhotos] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
-  const [place, setPlace] = useState(null);
+  const [place, setPlace] = useState<PlaceInterface>(null);
   const [reviews, setReviews] = useState([]);
   const [placeReady, setPlaceReady] = useState(false);
   const [reviewsReady, setReviewsReady] = useState(false);

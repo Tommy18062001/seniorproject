@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import BookingItem from "../../components/ItemComponent/BookingItem";
 import LoadingWidget from "../../components/LoadingWidget";
-import { TbListSearch } from "react-icons/tb";
 import { BsFolderX } from "react-icons/bs";
 
 export default function BookingsPage({ isUserAdmin = false }) {

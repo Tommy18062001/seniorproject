@@ -21,7 +21,7 @@ export default function PlaceEditPage() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [maxGuests, setMaxGuests] = useState(5);
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [price, setPrice] = useState(25000);
   const [rating, setRating] = useState(4);
 

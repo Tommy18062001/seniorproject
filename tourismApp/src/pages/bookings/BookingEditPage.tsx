@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingWidget from "../../components/LoadingWidget";
 import { ImPriceTags } from "react-icons/im";
+import { BookingInterface } from "../../Interfaces";
 
 export default function BookingEditPage() {
   const [isScrolled, setIsScrolled] = useOutletContext();
   setIsScrolled(true);
 
-  const [booking, setBooking] = useState(null);
+  const [booking, setBooking] = useState<BookingInterface>(null);
   const [ready, setReady] = useState(false);
 
   const [date, setDate] = useState("");
@@ -27,7 +28,7 @@ export default function BookingEditPage() {
     });
   }, [id]);
 
-  async function updateBooking(e) {
+  async function updateBooking(e: { preventDefault: () => void; }) {
     e.preventDefault();
     console.log("we are here");
 

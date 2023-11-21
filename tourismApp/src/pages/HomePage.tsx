@@ -24,24 +24,15 @@ import LoadingWidget from "../components/LoadingWidget";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { LiaAccessibleIcon } from "react-icons/lia";
 import { RxActivityLog } from "react-icons/rx";
+import { ReviewInterface } from "../Interfaces";
 
- interface ContextType {
-  context: boolean
- }
 
- interface Review {
-  owner: string,
-  placeId: string,
-  reviewText: string,
-  lastModified: string,
-  rating: number
- }
 
 export default function HomePage() {
-  const [isScrolled, setIsScrolled] = useOutletContext<ContextType>();
+  const [isScrolled, setIsScrolled] = useOutletContext();
 
   const [placeList, setPlaceList] = useState([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<ReviewInterface[]>([]);
   const [ready, setReady] = useState(false);
   const [reviewsReady, setReviewsReady] = useState(false);
 
