@@ -53,6 +53,7 @@ app.post("/signup", async (req, res) => {
       email,
       password: bcrypt.hashSync(password, bcryptSalt),
       isAdmin: false,
+      profilePic: "placeholder.png"
     });
     res.json(userDoc);
   } catch (e) {
@@ -142,6 +143,14 @@ app.post("/uploadPhotos", uploadMiddleware.array("photos", 50), (req, res) => {
   res.json(uploadedPhotos);
 });
 
+// delete image
+app.delete("/delete/:filename", (req, res) => {
+  const { filename } = req.params;
+  console.log(filename);
+  fs.unlinkSync("uploads/" + filename);
+  res.status(202).json("Image Deleted Successfully");
+});
+
 app.put("/userData", async (req, res) => {
   const { token } = req.cookies;
   const { id, name, email, profilePic } = req.body;
@@ -215,9 +224,6 @@ app.get("/placeData", async (req, res) => {
 
 app.get("/placeData/top", async (req, res) => {
   const placeData = await Place.find();
-  // placeData.sort(function(a, b) {
-  //   return b.rating-a.rating;
-  // })
   res.json(
     placeData.sort(function (a, b) {
       return b.rating - a.rating;
@@ -228,6 +234,15 @@ app.get("/placeData/top", async (req, res) => {
 app.get("/reviewData", async (req, res) => {
   const reviewData = await Review.find();
   res.json(reviewData);
+});
+
+app.get("/reviewData/top", async (req, res) => {
+  const reviewData = await Review.find();
+  res.json(
+    reviewData.sort(function (a, b) {
+      return b.rating - a.rating;
+    })
+  );
 });
 
 app.get("/placeData/:id", async (req, res) => {

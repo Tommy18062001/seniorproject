@@ -3,6 +3,12 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      screens: {
+        newlg: "960px",
+        newmd: "860px",
+        xs: "480px"
+      },
+
       backgroundImage: {
         "customer-review": "url('/src/assets/review.jpg')",
       },

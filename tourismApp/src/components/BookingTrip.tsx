@@ -47,7 +47,7 @@ export default function BookingTrip({ placeData, userData }) {
   }
   return (
     <div className="p-4 shadow shadow-gray-500 rounded-2xl">
-      <div className="flex flex-col gap-2 mb-12 text-lg p-2">
+      <div className="flex flex-col gap-2 mb-12 text-lg md:p-2">
         <p className="text-md flex items-center gap-1">
           <span className=" font-semibold flex gap-1 items-center">
             <ImPriceTags /> Ar {placeData.price}

@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import PlaceItem from "../components/PlaceItem";
-import ServiceItem from "../components/ServiceItem";
+import PlaceItem from "../components/ItemComponent/PlaceItem";
+import ServiceItem from "../components/ItemComponent/ServiceItem";
 import axios from "axios";
-import ReviewItem from "../components/ReviewItem";
+import ReviewItem from "../components/ItemComponent/ReviewItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useInView } from "react-intersection-observer";
 
-import {BsShieldCheck } from "react-icons/bs";
+import { BsArrowUp, BsShieldCheck } from "react-icons/bs";
 
-import forest from "../assets/forest.jpg";
+import image1 from "../assets/image1.jpg";
+import image2 from "../assets/image2.jpg";
+import image3 from "../assets/image3.jpg";
 import fanilo from "../assets/fanilo.jpg";
 import image from "../assets/image.jpg";
 
@@ -22,13 +24,24 @@ import LoadingWidget from "../components/LoadingWidget";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { LiaAccessibleIcon } from "react-icons/lia";
 import { RxActivityLog } from "react-icons/rx";
-import { BiSolidQuoteRight } from "react-icons/bi";
+
+ interface ContextType {
+  context: boolean
+ }
+
+ interface Review {
+  owner: string,
+  placeId: string,
+  reviewText: string,
+  lastModified: string,
+  rating: number
+ }
 
 export default function HomePage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const [isScrolled, setIsScrolled] = useOutletContext<ContextType>();
 
   const [placeList, setPlaceList] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [ready, setReady] = useState(false);
   const [reviewsReady, setReviewsReady] = useState(false);
 
@@ -36,21 +49,23 @@ export default function HomePage() {
     threshold: 0,
   });
 
-  if (inView) {
-    setIsScrolled(false);
-  } else {
+  // TO CHANGE LATER ON
+  if (!inView || window.innerWidth < 640) {
     setIsScrolled(true);
+  } else {
+    setIsScrolled(false);
   }
 
   console.log(isScrolled);
 
   useEffect(() => {
+    console.log(window.innerWidth);
     axios.get("/placeData/top").then(({ data }) => {
       setPlaceList(data);
       setReady(true);
     });
 
-    axios.get("/reviewData").then((reviewData) => {
+    axios.get("/reviewData/top").then((reviewData) => {
       setReviews(reviewData.data);
       setTimeout(() => setReviewsReady(true), 1000);
     });
@@ -61,9 +76,12 @@ export default function HomePage() {
   }
 
   return (
-    <div>
+    <div className="relative" id="top">
       {/* Introduction */}
-      <div className="w-full h-screen flex flex-col text-[#eee] justify-center items-center text-center gap-12 relative">
+      <div
+        className="w-full h-screen flex flex-col newmd:text-white justify-center items-center text-center gap-12 
+      relative"
+      >
         <Swiper
           spaceBetween={0}
           slidesPerView={1}
@@ -73,40 +91,39 @@ export default function HomePage() {
             disableOnInteraction: false,
           }}
           modules={[Pagination, Autoplay]}
-          className="absolute z-10 
+          className="hidden newmd:block absolute z-20 
             w-full h-screen max-w-none object-cover
             "
         >
           <SwiperSlide>
-            <img src={forest} alt="" />
+            <img src={image3} alt="" className="w-full h-auto object-cover" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={forest} alt="" />
+            <img src={image2} alt="" className="w-full h-auto object-cover" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={forest} alt="" />
+            <img src={image1} alt="" className="w-full h-auto object-cover" />
           </SwiperSlide>{" "}
         </Swiper>
-        <span className="absolute top-0 left-0 w-full h-full bg-black opacity-20 z-20"></span>
-        <h1 className="uppercase text-7xl font-bold z-40">
+        <span className="hidden newmd:block absolute top-0 left-0 w-full h-full bg-black opacity-25 z-30"></span>
+        <h1 className="uppercase text-4xl mt-16 lg:mt-0 newmd:text-6xl lg:text-7xl font-bold z-40">
           Welcome to Fanilo Tour
         </h1>
-        <p className="z-20">Explore the beauty of toamasina</p>
-        <p className="w-1/2 z-40" ref={ref}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
-          rerum provident voluptatum quibusdam officiis aperiam tenetur tempora
-          fugiat debitis deserunt necessitatibus distinctio animi repellat,
-          perferendis placeat enim magni ullam maxime.
+        <p className="z-30 text-md">Explore the beauty of toamasina</p>
+        <p className="w-2/3 sm:w-1/2 z-30 text-sm newmd:text-md" ref={ref}>
+          We are your trusted partner in creating memories that last a lifetime.
+          Explore with confidence, and let the wonders of our country unfold
+          before you. Your next adventure begins here.
         </p>
       </div>
 
       {/* Introduction */}
-      <div className="relative mx-auto mt-32 w-5/6 grid grid-cols-2 gap-2">
+      <div className="relative mx-auto mt-32 w-5/6 grid grid-cols-1 place-items-center lg:grid-cols-2 gap-2">
         <picture className="p-4">
           <img src={fanilo} alt="cover" className="w-full h-auto" />
         </picture>
         <div className="p-4 h-full">
-          <h1 className="text-6xl mb-16">Fanilo Tour Mada</h1>
+          <h1 className="text-5xl sm:text-6xl mb-16">Fanilo Tour Mada</h1>
           <p className="mb-4">
             Fanilo tour is tour agency which offers specialized tours of the
             exotic east coast of Madagascar. We are flexible and accommodate
@@ -132,11 +149,11 @@ export default function HomePage() {
         </h1>
         <h2 className="text-gray-500">A little description</h2>
         {/* list of top 3 destination */}
-        <div className="relative grid grid-cols-1 place-items-center sm:grid-cols-3 gap-4 m-8 items-start h-[400px]">
+        <div className="relative grid place-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-8 items-start h-auto lg:h-[400px]">
           {placeList.length > 0 &&
             placeList
               .slice(0, 3)
-              .map((place) => <PlaceItem placeData={place} />)}
+              .map((place, i) => <PlaceItem placeData={place} key={i} />)}
         </div>
 
         <button className="btn-primary">See more</button>
@@ -148,34 +165,33 @@ export default function HomePage() {
         <h1 className="text-4xl font-semibold mt-2 mb-2">Why us</h1>
         <h2 className="text-gray-500">Never miss any updates and offers</h2>
         {/* Display the reviews of the customers */}
-        <div className="grid grid-cols-1 place-items-center sm:grid-cols-3 gap-8 m-8 mt-16">
+        <div className="grid grid-cols-1 place-items-center sm:grid-cols-2 newlg:grid-cols-3 gap-8 m-8 mt-16">
           <ServiceItem
             Icon={BsShieldCheck}
             title="Travel Insurance"
-            description="Offer travel insurance options to protect travelers during their trips. ptio minus iste eius dignissimos vel? Minima tempora"
+            description="Offer travel insurance options to protect travelers during their trips. 
+            Your adventure is not only memorable but also worry-free"
           />
           <ServiceItem
             Icon={AiOutlineUsergroupAdd}
             title="Group Travel and Corporate Services"
-            description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis ex
-        quod corrupti, optio minus iste eius dignissimos vel? Minima tempora
-        delectus cupiditate eum nisi rem impedit dolorem dignissimos, mollitia
-        quod."
+            description="Whether you're planning a group getaway with friends and 
+            family or organizing a corporate retreat, 
+            our tailored services cater to the unique needs of collective travel. 
+            "
           />
           <ServiceItem
             Icon={LiaAccessibleIcon}
             title="Accessibility and Inclusivity"
-            description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis ex
-        quod corrupti, optio minus iste eius dignissimos vel? Minima tempora
-        delectus cupiditate eum nisi rem impedit dolorem dignissimos, mollitia
-        quod."
+            description="Our commitment to accessibility goes beyond convenience;
+            From thoughtfully designed itineraries to accommodations that prioritize comfort and inclusivity, 
+            we strive to ensure that every traveler, regardless of ability, feels welcome and empowered to explore the world."
           />
           <ServiceItem
             Icon={RxActivityLog}
             title="Activity and Excursion Booking"
-            description="Provide options for booking activities, tours, and excursions at the destination.
-            Recommendations for adventure sports, cultural experiences, and more cupiditate eum nisi rem impedit dolorem dignissimos, mollitia
-        quod."
+            description=" Our platform empowers you to seamlessly plan and book 
+            a diverse range of activities and excursions, tailored to your interests and preferences."
           />
         </div>
       </div>
@@ -185,7 +201,7 @@ export default function HomePage() {
         <h1 className="text-4xl font-semibold mt-2 mb-2">Customer reviews</h1>
         <h2 className="text-gray-500">What people say about us</h2>
         {/* Display the reviews of the customers */}
-        <div className="flex items-center gap-4 relative w-full mt-4">
+        <div className="flex items-center gap-4 relative w-full h-auto mt-4">
           <Swiper
             spaceBetween={50}
             slidesPerView={1}
@@ -200,31 +216,44 @@ export default function HomePage() {
             modules={[Pagination, Autoplay]}
           >
             {reviews.length > 0 &&
-              reviews.map((review) => (
-                <SwiperSlide className="px-2 py-5 mt-4 flex flex-col justify-center items-center">
-                  <BiSolidQuoteRight className="text-center text-4xl" />
-                  <ReviewItem reviewData={review} isTestimonials={true} />
-                </SwiperSlide>
-              ))}
+              reviews.map((review, i) =>
+                review.rating > 3 ? (
+                  <SwiperSlide key={i} className="px-2 py-5 mt-4 flex flex-col justify-center items-center h-[400px]">
+                    <ReviewItem reviewData={review} isTestimonials={true} />
+                  </SwiperSlide>
+                ) : null
+              )}
           </Swiper>
         </div>
       </div>
 
       <div className="w-5/6 h-auto mt-32 grid grid-cols-1 lg:grid-cols-2 relative justify-items-center mx-auto">
-        <section className="flex flex-col justify-center items-start">
+        <section className="flex flex-col justify-center items-start mb-8 lg:mb-0">
           <h1 className="text-4xl mb-8">Get in touch</h1>
           <p className="w-full mb-6">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequatur, iusto facilis. Odit minima illo dolores exercitationem
-            quo laboriosam commodi inventore quaerat cumque possimus libero
-            blanditiis doloremque, quidem, deserunt ratione placeat.
+            We're here to turn your travel dreams into reality. If you have
+            questions about our curated tours, need assistance in planning a
+            personalized itinerary, or simply want to share your excitement
+            about an upcoming adventure, please don't hesitate to reach out to
+            us
           </p>
-          <Link to={"/aboutus"} className="block btn-primary w-max">
+          <Link to={"/aboutUs#contact"} className="block btn-primary w-max">
             Send a message
           </Link>
         </section>
         <img src={image} alt="image" className=" max-w-[350px] h-auto" />
       </div>
+
+      {/* button to help the user scroll up  */}
+      <button
+        onClick={() => {
+          document.getElementById("top").scrollIntoView({ behavior: "smooth" });
+        }}
+        className="fixed bottom-[50px] right-10 p-2 bg-primary border border-white text-white
+         text-2xl hover:-translate-y-2 transition-all duration-150 z-10"
+      >
+        <BsArrowUp />
+      </button>
     </div>
   );
 }
