@@ -44,6 +44,8 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 // fix cors permission
 app.use(cors(corsOptions));
 
+
+//**************************************************ACCOUNT AUTH*************************************************//
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
   console.log({ name, email, password });
@@ -87,6 +89,12 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+app.post("/signout", (req, res) => {
+  // reset the cookie
+  res.cookie("token", "").json(true);
+});
+
+//**************************************************USER ENDPOINTS*************************************************//
 app.get("/userData", (req, res) => {
   // in order to use Jwt we need the token
   const { token } = req.cookies;
@@ -110,11 +118,33 @@ app.get("/userData/:id", async (req, res) => {
   res.json(userData);
 });
 
-app.post("/signout", (req, res) => {
-  // reset the cookie
-  res.cookie("token", "").json(true);
+app.put("/userData", async (req, res) => {
+  const { token } = req.cookies;
+  const { id, name, email, profilePic } = req.body;
+  console.log(name, email, profilePic);
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      const userDoc = await User.findById(userData.id);
+
+      if (userDoc._id == id) {
+        userDoc.set({
+          name: name,
+          email: email,
+          profilePic: profilePic,
+        });
+        await userDoc.save();
+        console.log("we finished here");
+      }
+      res.json("save");
+    });
+  } else {
+    res.json(null);
+  }
 });
 
+
+//**************************************************PICTURES UPLOAD*************************************************//
 // user profile Picture Upload
 const uploadMiddleware = multer({ dest: "uploads/" });
 app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
@@ -151,31 +181,7 @@ app.delete("/delete/:filename", (req, res) => {
   res.status(202).json("Image Deleted Successfully");
 });
 
-app.put("/userData", async (req, res) => {
-  const { token } = req.cookies;
-  const { id, name, email, profilePic } = req.body;
-  console.log(name, email, profilePic);
-  if (token) {
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-      if (err) throw err;
-      const userDoc = await User.findById(userData.id);
-
-      if (userDoc._id == id) {
-        userDoc.set({
-          name: name,
-          email: email,
-          profilePic: profilePic,
-        });
-        await userDoc.save();
-        console.log("we finished here");
-      }
-      res.json("save");
-    });
-  } else {
-    res.json(null);
-  }
-});
-
+//**************************************************PLACE ENDPOINTS*************************************************//
 app.post("/newPlace", (req, res) => {
   const {
     title,
@@ -187,14 +193,6 @@ app.post("/newPlace", (req, res) => {
     price,
     rating,
   } = req.body;
-
-  // console.log(title,
-  //   location,
-  //   lastModified,
-  //   description,
-  //   maxGuests,
-  //   photos,
-  //   price)
 
   const { token } = req.cookies;
 
@@ -226,20 +224,6 @@ app.get("/placeData/top", async (req, res) => {
   const placeData = await Place.find();
   res.json(
     placeData.sort(function (a, b) {
-      return b.rating - a.rating;
-    })
-  );
-});
-
-app.get("/reviewData", async (req, res) => {
-  const reviewData = await Review.find();
-  res.json(reviewData);
-});
-
-app.get("/reviewData/top", async (req, res) => {
-  const reviewData = await Review.find();
-  res.json(
-    reviewData.sort(function (a, b) {
       return b.rating - a.rating;
     })
   );
@@ -292,6 +276,22 @@ app.delete("/placeData/:id", async (req, res) => {
   res.status(202).json("Place Deleted Successfully");
 });
 
+
+//**************************************************REVIEW ENDPOINTS*************************************************//
+app.get("/reviewData", async (req, res) => {
+  const reviewData = await Review.find();
+  res.json(reviewData);
+});
+
+app.get("/reviewData/top", async (req, res) => {
+  const reviewData = await Review.find();
+  res.json(
+    reviewData.sort(function (a, b) {
+      return b.rating - a.rating;
+    })
+  );
+});
+
 // reviews endpoints
 app.get("/reviewData/:id", async (req, res) => {
   const { id } = req.params;
@@ -317,7 +317,7 @@ app.post("/newReview", (req, res) => {
   });
 });
 
-// booking -----------------------------------------------------
+//**************************************************BOOKING ENDPOINTS***µµ******************************************//
 app.post("/newBooking", (req, res) => {
   const { id, date, guests, lastModified, price } = req.body;
   const { token } = req.cookies;
@@ -415,4 +415,5 @@ app.get("/bookingData/:id", async (req, res) => {
   res.json(bookingData);
 });
 
+//***********************************************PORT DECLARATION*************************************************//
 app.listen(4000);
