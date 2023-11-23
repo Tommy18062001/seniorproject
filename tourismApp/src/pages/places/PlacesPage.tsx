@@ -5,9 +5,10 @@ import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { Link, useOutletContext } from "react-router-dom";
 import LoadingWidget from "../../components/LoadingWidget";
 import { BsFolderX } from "react-icons/bs";
+import { IsScrolledInterface } from "../../Interfaces";
 
 export default function PlacesPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   const [places, setPlaces] = useState([]);

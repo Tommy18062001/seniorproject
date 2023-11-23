@@ -8,13 +8,17 @@ import { ImCancelCircle, ImPriceTags } from "react-icons/im";
 import { FaUsers } from "react-icons/fa";
 import { BiTrashAlt } from "react-icons/bi";
 import { AiOutlineUser } from "react-icons/ai";
+import { BookingInterface, PlaceInterface, UserInterface } from "../../Interfaces";
 
 // add the type for each element
-export interface Place {}
+export interface BookingItemInterface {
+  bookingData: BookingInterface,
+  isUserAdmin: boolean
+}
 
-export default function BookingItem({ bookingData, isUserAdmin = false }) {
-  const [place, setPlace] = useState(null);
-  const [user, setUser] = useState(null);
+export default function BookingItem({ bookingData, isUserAdmin = false }: BookingItemInterface) {
+  const [place, setPlace] = useState<PlaceInterface | null>(null);
+  const [user, setUser] = useState<UserInterface | null>(null);
   const [ready, setReady] = useState(false);
   const [placeReady, setPlaceReady] = useState(false);
 
@@ -29,7 +33,7 @@ export default function BookingItem({ bookingData, isUserAdmin = false }) {
   const appointment = new Date(bookingData.selectedDate);
   const today = new Date();
 
-  const diff = Math.abs(bookingDate - today);
+  const diff = Math.abs(+bookingDate - +today);
   const timeElapsed = Math.ceil(diff / (1000 * 60 * 60));
 
   if (timeElapsed < 48) {
@@ -56,7 +60,7 @@ export default function BookingItem({ bookingData, isUserAdmin = false }) {
 
   async function cancelBooking(
     id: string,
-    event: MouseEvent<HTMLButtonElement, MouseEvent>
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) {
     event.preventDefault();
 
@@ -137,7 +141,7 @@ export default function BookingItem({ bookingData, isUserAdmin = false }) {
             {isUserAdmin && (
               <p className="text-md flex gap-2 items-center w-max pl-1 pr-2 mb-2">
                 <AiOutlineUser />{" "}
-                <span className="text-sm">Added By: {user.name}</span>
+                <span className="text-sm">Added By: {user?.name}</span>
               </p>
             )}
             <p className="text-md flex gap-2 items-center bg-primary text-white w-max pl-1 pr-2">
@@ -199,7 +203,7 @@ export default function BookingItem({ bookingData, isUserAdmin = false }) {
           {isUserAdmin && (
             <p className="text-md flex gap-2 items-center w-max pl-1 pr-2 mb-2">
               <AiOutlineUser />{" "}
-              <span className="text-sm">Added By: {user.name}</span>
+              <span className="text-sm">Added By: {user?.name}</span>
             </p>
           )}
           <p className="text-md flex gap-2 items-center bg-primary text-white w-max pl-1 pr-2">

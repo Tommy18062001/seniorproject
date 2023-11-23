@@ -5,18 +5,19 @@ import { UserContext } from "../../UserContext";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
 
 export default function AccountEditPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   const { id } = useParams();
 
-  const { user, setUser, ready } = useContext(UserContext);
+  const { user, setUser, ready } = useContext(UserContext) as UserContextInterface;
 
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [profilePic, setProfilePic] = useState(user.profilePic);
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
+  const [profilePic, setProfilePic] = useState(user?.profilePic);
 
   const [redirect, setRedirect] = useState(false);
 
@@ -63,8 +64,9 @@ export default function AccountEditPage() {
     }
   }
 
-  async function uploadPic(e: { target: { files: any } }) {
-    const files = e.target.files;
+  async function uploadPic(e: React.SyntheticEvent) {
+    const target = e.target as HTMLFormElement;
+    const files = target.files;
     console.log(files[0]);
     const data = new FormData();
     data.append("profilePic", files[0]);
@@ -117,7 +119,7 @@ export default function AccountEditPage() {
           <label>Name</label>
           <input
             type="text"
-            defaultValue={user.name}
+            defaultValue={user?.name}
             onChange={(e) => setName(e.target.value)}
           />{" "}
         </div>
@@ -126,7 +128,7 @@ export default function AccountEditPage() {
           <label>Email Address</label>
           <input
             type="email"
-            defaultValue={user.email}
+            defaultValue={user?.email}
             onChange={(e) => setEmail(e.target.value)}
           />{" "}
         </div>

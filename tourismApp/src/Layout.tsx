@@ -9,7 +9,7 @@ export default function Layout() {
   return (
     <div className="">
       <Header isScrolled={isScrolled} />
-      <Outlet context={[isScrolled, setIsScrolled]} />
+      <Outlet context={{setIsScrolled}} />
       <Footer />
     </div>
   );

@@ -1,4 +1,10 @@
-export default function TourItem({ title, description }) {
+export default function TourItem({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
   const titleLength = title.length;
   console.log(titleLength);
   return (

@@ -3,17 +3,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingWidget from "../../components/LoadingWidget";
 import { ImPriceTags } from "react-icons/im";
-import { BookingInterface } from "../../Interfaces";
+import { BookingInterface, IsScrolledInterface } from "../../Interfaces";
+
 
 export default function BookingEditPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
-  const [booking, setBooking] = useState<BookingInterface>(null);
+  const [booking, setBooking] = useState<BookingInterface | null>(null);
   const [ready, setReady] = useState(false);
 
   const [date, setDate] = useState("");
-  const [guests, setGuests] = useState();
+  const [guests, setGuests] = useState(booking?.guests);
 
   const { id } = useParams();
 
@@ -62,7 +63,7 @@ export default function BookingEditPage() {
     alert("Booking Updated Successfully");
   }
 
-  if (!ready) {
+  if (!ready || !booking) {
     return <LoadingWidget />;
   }
 
@@ -89,7 +90,7 @@ export default function BookingEditPage() {
             className="outline-none"
             type="date"
             name="appointmentDate"
-            defaultValue={booking.selectedDate}
+            defaultValue={booking?.selectedDate}
             onChange={(e) => setDate(e.target.value)}
             required
           />
@@ -100,7 +101,7 @@ export default function BookingEditPage() {
             type="number"
             name="guestCount"
             defaultValue={booking.guests}
-            onChange={(e) => setGuests(e.target.value)}
+            onChange={(e) => setGuests(parseInt(e.target.value))}
           />
         </div>
         <button className="btn-primary w-full mx-auto my-4">

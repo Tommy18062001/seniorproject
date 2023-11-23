@@ -4,9 +4,10 @@ import { useOutletContext, useParams } from "react-router-dom";
 import BookingItem from "../../components/ItemComponent/BookingItem";
 import LoadingWidget from "../../components/LoadingWidget";
 import { BsFolderX } from "react-icons/bs";
+import { IsScrolledInterface } from "../../Interfaces";
 
 export default function BookingsPage({ isUserAdmin = false }) {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   const [bookings, setBookings] = useState([]);

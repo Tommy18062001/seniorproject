@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { FaStar } from "react-icons/fa";
 
-export default function RatingWidget({ rating, isreview = false }) {
-  let stars = [];
+export default function RatingWidget({ rating, isreview = false } : {rating: number, isreview: boolean}) {
+  const stars: ReactNode[] = [];
 
-  [...Array(rating)].map((e, i) =>
+  [...Array(rating)].map((i) =>
     stars.push(
       <span>
         <FaStar className=" text-yellow-500" key={i} />
@@ -12,7 +13,7 @@ export default function RatingWidget({ rating, isreview = false }) {
   );
 
   if (rating < 5) {
-    [...Array(5 - rating)].map((e, i) =>
+    [...Array(5 - rating)].map((i) =>
       stars.push(
         <span>
           <FaStar key={i} />

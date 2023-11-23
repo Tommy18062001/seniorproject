@@ -3,13 +3,19 @@ import { LiaTimesSolid } from "react-icons/lia";
 import { TbEdit } from "react-icons/tb";
 import axios from "axios";
 import { MouseEvent, useState } from "react";
+import { PlaceInterface } from "../../Interfaces";
 
-export default function PlaceItem({ placeData, isList = false }) {
+interface PlaceItemIntertace {
+  placeData: PlaceInterface,
+  isList: boolean
+}
+
+export default function PlaceItem({ placeData, isList = false }: PlaceItemIntertace) {
   const [redirect, setRedirect] = useState(false);
 
   async function deletePlace(
     id: string,
-    event: MouseEvent<HTMLButtonElement, MouseEvent>
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) {
     event.preventDefault();
     if (id) {

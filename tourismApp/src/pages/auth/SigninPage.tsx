@@ -5,9 +5,10 @@ import { UserContext } from "../../UserContext";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
 
 export default function SigninPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
 
   useEffect(() => {
     setIsScrolled(true);
@@ -18,7 +19,7 @@ export default function SigninPage() {
   // redirect user if login in
   const [redirect, setRedirect] = useState(false);
 
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext) as UserContextInterface;
 
   async function SigninUser(e: { preventDefault: () => void }) {
     e.preventDefault();

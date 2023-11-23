@@ -1,4 +1,5 @@
 export interface PlaceInterface {
+  _id: string;
   owner: string;
   title: string;
   location: string;
@@ -27,6 +28,7 @@ export interface UserInterface {
 }
 
 export interface BookingInterface {
+  _id: string;
   owner: string;
   placeId: string;
   lastModified: string;
@@ -34,4 +36,15 @@ export interface BookingInterface {
   guests: number;
   price: number;
   isCancelled: boolean;
+}
+
+export interface UserContextInterface {
+  user: UserInterface | null,
+  setUser: (user: UserInterface | null) => void,
+  ready: boolean
+}
+
+export interface IsScrolledInterface {
+  isScrolled: boolean,
+  setIsScrolled: (isScrolled: boolean) => void,
 }

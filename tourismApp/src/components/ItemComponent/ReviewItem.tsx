@@ -2,15 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import RatingWidget from "../RatingWidget";
 import { BiSolidQuoteRight, BiTime } from "react-icons/bi";
+import { ReviewInterface, UserInterface } from "../../Interfaces";
 
-export default function ReviewItem({ reviewData, isTestimonials = false }) {
-  const [user, setUser] = useState(null);
+interface ReviewItemInterface {
+  reviewData: ReviewInterface,
+  isTestimonials: boolean
+}
+
+export default function ReviewItem({ reviewData, isTestimonials = false }: ReviewItemInterface) {
+  const [user, setUser] = useState<UserInterface | null>(null);
   const [ready, setReady] = useState(false);
 
   const reviewDate = new Date(reviewData.lastModified);
   const today = new Date();
 
-  const diff = Math.abs(reviewDate - today);
+  const diff = Math.abs(+reviewDate - +today);
   let timeElapsed;
 
   if (diff > 1000 * 60 && diff < 1000 * 3600) {
@@ -44,11 +50,11 @@ export default function ReviewItem({ reviewData, isTestimonials = false }) {
         <div className="flex gap-2 justify-center items-center w-full mb-2 relative">
           <img
             className="w-12 h-12 rounded-full object-cover"
-            src={"http://localhost:4000/uploads/" + user.profilePic}
-            alt={user.profilePic}
+            src={"http://localhost:4000/uploads/" + user?.profilePic}
+            alt={user?.profilePic}
           />
           <section className="h-full text-left">
-            <h1 className="">{user.name}</h1>
+            <h1 className="">{user?.name}</h1>
             <RatingWidget rating={reviewData.rating} isreview={true} />
           </section>
         </div>
@@ -61,12 +67,12 @@ export default function ReviewItem({ reviewData, isTestimonials = false }) {
       <div className="flex gap-2 items-start mb-2">
         <img
           className="w-12 h-12 rounded-full object-cover"
-          src={"http://localhost:4000/uploads/" + user.profilePic}
-          alt={user.profilePic}
+          src={"http://localhost:4000/uploads/" + user?.profilePic}
+          alt={user?.profilePic}
         />
         <div className="flex justify-between w-full">
           <section>
-            <h1 className="font-bold">{user.name}</h1>
+            <h1 className="font-bold">{user?.name}</h1>
             <RatingWidget rating={reviewData.rating} isreview={true} />
           </section>
           <p className="text-sm text-gray-500 flex gap-1 items-center h-max">

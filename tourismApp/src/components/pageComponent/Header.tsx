@@ -3,9 +3,10 @@ import { useContext } from "react";
 import { UserContext } from "../../UserContext";
 import { PiUserCircleLight } from "react-icons/pi";
 import logo from "../../assets/FaniloTours.png";
+import { UserContextInterface } from "../../Interfaces";
 
 export default function Header({ isScrolled = true }) {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext) as UserContextInterface;
   let defaultStyle;
   if (isScrolled) {
     defaultStyle =

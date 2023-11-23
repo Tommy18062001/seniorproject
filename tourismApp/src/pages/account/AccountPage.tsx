@@ -6,12 +6,13 @@ import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { GiBlackBook } from "react-icons/gi";
 import { BiCalendarEvent } from "react-icons/bi";
 import { UserContext } from "../../UserContext";
+import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
 
 export default function AccountPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
-  const { user, setUser, ready } = useContext(UserContext);
+  const { user, setUser, ready } = useContext(UserContext) as UserContextInterface;
   const [redirect, setRedirect] = useState(false);
 
   async function logoutUser() {
@@ -41,13 +42,13 @@ export default function AccountPage() {
         {/* picture */}
         <img
           className=" w-40 h-40 rounded-full object-cover"
-          src={"http://localhost:4000/uploads/" + user.profilePic}
+          src={"http://localhost:4000/uploads/" + user?.profilePic}
           alt=""
         />
         {/* description */}
         <div className="w-full h-full flex flex-col justify-between p-2">
           <div className="">
-            <h1 className="capitalize text-2xl mb-2">{user.name}</h1>
+            <h1 className="capitalize text-2xl mb-2">{user?.name}</h1>
             <p className="text-gray-800 flex gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,13 +64,13 @@ export default function AccountPage() {
                   d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
                 />
               </svg>
-              {user.email}
+              {user?.email}
             </p>
           </div>
           <div className="flex  gap-2">
             <Link
               className="btn-primary w-32 text-center"
-              to={"/account/" + user._id}
+              to={"/account/" + user?._id}
             >
               Edit
             </Link>
@@ -80,7 +81,7 @@ export default function AccountPage() {
         </div>
       </div>
       {/* navigation  */}
-      {user.isAdmin ? (
+      {user?.isAdmin ? (
         <div className="border-t border-gray-400 w-4/5 mx-auto p-4 relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
           <Link to={"/account/places/new"} className={navigationStyling}>
             <AiOutlineAppstoreAdd className="text-4xl" />
@@ -126,7 +127,7 @@ export default function AccountPage() {
           </Link>
 
           <Link
-            to={"/account/bookings/" + user._id}
+            to={"/account/bookings/" + user?._id}
             className={navigationStyling}
           >
             <GiBlackBook className="text-4xl" />

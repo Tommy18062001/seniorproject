@@ -6,19 +6,19 @@ import RatingWidget from "../../components/RatingWidget";
 import ReviewItem from "../../components/ItemComponent/ReviewItem";
 import LoadingWidget from "../../components/LoadingWidget";
 import { UserContext } from "../../UserContext";
-import { PlaceInterface } from "../../Interfaces";
+import { IsScrolledInterface, PlaceInterface, UserContextInterface } from "../../Interfaces";
 
 
 export default function PlacePage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
-  const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext) as UserContextInterface;
 
   const [showPhotos, setshowPhotos] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
-  const [place, setPlace] = useState<PlaceInterface>(null);
+  const [place, setPlace] = useState<PlaceInterface | null>(null);
   const [reviews, setReviews] = useState([]);
   const [placeReady, setPlaceReady] = useState(false);
   const [reviewsReady, setReviewsReady] = useState(false);
@@ -65,7 +65,7 @@ export default function PlacePage() {
     await axios.post("/newReview", reviewData);
     alert("Review Added Successfully");
   }
-  if (!placeReady || !reviewsReady) {
+  if (!placeReady || !place || !reviewsReady) {
     return <LoadingWidget />;
   }
 
@@ -98,7 +98,7 @@ export default function PlacePage() {
       {/* place headline */}
       <h1 className="text-4xl">{place.title}</h1>
       <div>
-        <RatingWidget rating={place.rating} />
+        <RatingWidget rating={place.rating} isreview={false} />
         <p> {place.location} </p>
       </div>
 
@@ -167,7 +167,7 @@ export default function PlacePage() {
         {reviews ? (
           <div>
             {reviews.length > 0 &&
-              reviews.map((review) => <ReviewItem reviewData={review} />)}
+              reviews.map((review) => <ReviewItem reviewData={review} isTestimonials={false} />)}
           </div>
         ) : (
           <div>

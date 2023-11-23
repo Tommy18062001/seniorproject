@@ -1,10 +1,14 @@
 import axios from "axios";
 import { createContext, useState, useEffect } from "react";
+import { UserContextInterface, UserInterface } from "./Interfaces";
 
-export const UserContext = createContext({});
+export const UserContext = createContext<UserContextInterface | undefined>(undefined);
 
-export function UserContextProvider({ children }) {
-  const [user, setUser] = useState(null);
+interface childrenInterace {
+  children: React.ReactNode
+}
+export function UserContextProvider({ children }: childrenInterace) {
+  const [user, setUser] = useState<UserInterface | null>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     if (!user) {

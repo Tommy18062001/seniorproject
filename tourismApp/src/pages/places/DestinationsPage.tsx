@@ -5,12 +5,13 @@ import { BsFolderX } from "react-icons/bs";
 import { UserContext } from "../../UserContext";
 import LoadingWidget from "../../components/LoadingWidget";
 import DestinationItem from "../../components/ItemComponent/DestinationItem";
+import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
 
 export default function DestinationsPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
-  const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext) as UserContextInterface;
 
   const [places, setPlaces] = useState([]);
   const [placeReady, setPlaceReady] = useState(false);

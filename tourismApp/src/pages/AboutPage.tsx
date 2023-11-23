@@ -12,9 +12,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import emailjs from "@emailjs/browser";
 import { useEffect } from "react";
+import { IsScrolledInterface } from "../Interfaces";
 
 export default function AboutPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   useEffect(() => {
@@ -36,13 +37,14 @@ export default function AboutPage() {
     }
   }, []);
 
-  function sendEmail(e: { preventDefault: () => void; target: string | HTMLFormElement; }) {
+  function sendEmail(e: React.SyntheticEvent) {
     e.preventDefault();
+    const target = e.target as HTMLFormElement;
 
     emailjs.sendForm(
       "service_9uphv2k",
       "template_2hjte5w",
-      e.target,
+      target,
       "Ws1Bqh3AZ0IiHcEI_"
     );
 
@@ -57,7 +59,7 @@ export default function AboutPage() {
       theme: "light",
     });
 
-    document.getElementById("messageForm").reset();
+    target.reset()
   }
   return (
     <div className="mt-32 w-4/5 mx-auto relative" id="top">

@@ -4,9 +4,10 @@ import { Link, Navigate, useOutletContext } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IsScrolledInterface } from "../../Interfaces";
 
 export default function SignupPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   const [name, setName] = useState("");

@@ -8,13 +8,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdFileUpload } from "react-icons/md";
 import { BiTrashAlt } from "react-icons/bi";
+import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
 
 export default function PlaceEditPage() {
-  const [isScrolled, setIsScrolled] = useOutletContext();
+  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   const { id } = useParams();
-  const { user, ready } = useContext(UserContext);
+  const { user, ready } = useContext(UserContext) as UserContextInterface;
   const [redirect, setRedirect] = useState(false);
 
   const [title, setTitle] = useState("");
@@ -40,8 +41,9 @@ export default function PlaceEditPage() {
     });
   }, [id]);
 
-  async function uploadPics(e: { target: { files: any } }) {
-    const files = e.target.files;
+  async function uploadPics(e: React.SyntheticEvent) {
+    const target = e.target as HTMLFormElement;
+    const files = target.files;
     console.log(files);
     const data = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -206,7 +208,7 @@ export default function PlaceEditPage() {
             type="number"
             placeholder="Max Guests"
             value={maxGuests}
-            onChange={(e) => setMaxGuests(e.target.value)}
+            onChange={(e) => setMaxGuests(parseInt(e.target.value))}
           />
         </div>
         <div className="w-full mt-4">
@@ -215,7 +217,7 @@ export default function PlaceEditPage() {
             type="number"
             placeholder="Price"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => setPrice(parseInt(e.target.value))}
           />
         </div>
 
@@ -225,7 +227,7 @@ export default function PlaceEditPage() {
             type="number"
             placeholder="Rating"
             value={rating}
-            onChange={(e) => setRating(e.target.value)}
+            onChange={(e) => setRating(parseInt(e.target.value))}
           />
         </div>
         <button className="btn-primary w-2/4 mt-6">Submit</button>
