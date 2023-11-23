@@ -16,7 +16,7 @@ import AboutPage from "./pages/AboutPage";
 import BookingEditPage from "./pages/bookings/BookingEditPage";
 import DestinationsPage from "./pages/places/DestinationsPage";
 
-axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.baseURL = "https://fanilo-tour.vercel.app/";
 axios.defaults.withCredentials = true;
 
 // for each route we have path and element
