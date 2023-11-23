@@ -23,7 +23,7 @@ const Review = require("./models/Review");
 const Booking = require("./models/Booking");
 
 const corsOptions = {
-  origin: ["https://fanilotour.vercel.app/"],
+  origin: ["https://fanilotour.vercel.app"],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
