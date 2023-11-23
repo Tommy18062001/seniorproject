@@ -42,7 +42,7 @@ export default function PlacePage() {
 
     axios.get("/reviewData/" + id).then((reviewData) => {
       setReviews(reviewData.data);
-      setTimeout(() => setReviewsReady(true), 3000);
+      setReviewsReady(true);
     });
   }, [id]);
 
