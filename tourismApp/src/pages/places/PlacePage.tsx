@@ -78,7 +78,7 @@ export default function PlacePage() {
             place.photos.map((photo) => (
               <img
                 className="rounded-md w-3/4 max-w-2xl h-[361px] object-cover"
-                src={"https://fanilotour.onrender.com/" + photo}
+                src={"https://fanilotour.onrender.com/uploads/" + photo}
                 alt={photo}
               />
             ))}
@@ -107,19 +107,19 @@ export default function PlacePage() {
         <div className="w-full h-auto sm:h-[424px] relative">
           <img
             className="rounded-md w-full h-full object-cover"
-            src={"https://fanilotour.onrender.com/" + place.photos[0]}
+            src={"https://fanilotour.onrender.com/uploads/" + place.photos[0]}
             alt=""
           />
         </div>
         <div className="hidden xs:grid grid-cols-2 md:grid-cols-1 gap-2 w-full">
           <img
             className="rounded-md w-full h-52 object-cover"
-            src={"https://fanilotour.onrender.com/" + place.photos[1]}
+            src={"https://fanilotour.onrender.com/uploads/" + place.photos[1]}
             alt=""
           />
           <img
             className="rounded-md w-full h-52 object-cover"
-            src={"https://fanilotour.onrender.com/" + place.photos[2]}
+            src={"https://fanilotour.onrender.com/uploads/" + place.photos[2]}
             alt=""
           />
         </div>

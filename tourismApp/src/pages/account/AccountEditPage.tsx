@@ -103,7 +103,7 @@ export default function AccountEditPage() {
           <label>Upload a Profile Picture</label>
           <img
             className="my-2 w-40 h-40 object-cover"
-            src={"https://fanilotour.onrender.com/" + profilePic}
+            src={"https://fanilotour.onrender.com/uploads/" + profilePic}
             alt=""
           />
           <input
