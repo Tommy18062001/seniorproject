@@ -42,7 +42,7 @@ export default function AccountPage() {
         {/* picture */}
         <img
           className=" w-40 h-40 rounded-full object-cover"
-          src={"http://localhost:4000/uploads/" + user?.profilePic}
+          src={"https://fanilotour.onrender.com/" + user?.profilePic}
           alt=""
         />
         {/* description */}

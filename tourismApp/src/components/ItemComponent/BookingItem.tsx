@@ -183,7 +183,7 @@ export default function BookingItem({ bookingData, isUserAdmin = false }: Bookin
     >
       <img
         className="w-full h-full object-cover hidden md:col-start-1 md:row-span-3 md:block"
-        src={"http://localhost:4000/uploads/" + place.photos[0]}
+        src={"https://fanilotour.onrender.com/" + place.photos[0]}
         alt={place.photos[0]}
       />
       <div className="w-full flex flex-col gap-2 items-start justify-between mt-2 ml-2 col-start-1 col-span-2 md:col-start-2 row-span-2">

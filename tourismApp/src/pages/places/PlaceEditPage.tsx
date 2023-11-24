@@ -165,7 +165,7 @@ export default function PlaceEditPage() {
                 >
                   <img
                     className=" w-full h-full object-cover"
-                    src={"http://localhost:4000/uploads/" + photo}
+                    src={"https://fanilotour.onrender.com/" + photo}
                     alt={photo}
                   />
                   <button
