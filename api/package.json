@@ -14,6 +14,7 @@
   },
   "scripts": {
     "serve": "nodemon index.js",
-    "build": "npm i"
+    "build": "npm i",
+    "vercel-build": ""
   }
 }
