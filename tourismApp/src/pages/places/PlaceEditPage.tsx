@@ -9,9 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { MdFileUpload } from "react-icons/md";
 import { BiTrashAlt } from "react-icons/bi";
 import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
+import { storage } from "../../components/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function PlaceEditPage() {
-  const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
+  const { setIsScrolled } = useOutletContext() as IsScrolledInterface;
   setIsScrolled(true);
 
   const { id } = useParams();
@@ -44,16 +46,16 @@ export default function PlaceEditPage() {
   async function uploadPics(e: React.SyntheticEvent) {
     const target = e.target as HTMLFormElement;
     const files = target.files;
-    console.log(files);
-    const data = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      data.append("photos", files[i]);
-    }
 
-    const { data: filenames } = await axios.post("/uploadPhotos", data, {
-      headers: { "Content-type": "multipart/form-data" },
-    });
-    setPhotos([...photos, ...filenames]);
+    for (let i = 0; i < files.length; i++) {
+      const imageRef = ref(storage, "images/" + files[i].name.replace(" ", ""));
+      uploadBytes(imageRef, files[i]).then((response) => {
+        getDownloadURL(response.ref).then((url) => {
+          console.log(url);
+          setPhotos((prev) => [...prev, url]);
+        });
+      });
+    }
   }
 
   async function savePlace(e: { preventDefault: () => void }) {
@@ -160,12 +162,12 @@ export default function PlaceEditPage() {
             {photos.length > 0 &&
               photos.map((photo) => (
                 <div
-                  className="w-auto h-32 rounded-2xl overflow-hidden relative border border-gray-300"
+                  className="w-full h-32 rounded-2xl overflow-hidden relative border border-gray-300"
                   key={photo}
                 >
                   <img
                     className=" w-full h-full object-cover"
-                    src={"https://fanilotour.onrender.com/uploads/" + photo}
+                    src={photo}
                     alt={photo}
                   />
                   <button

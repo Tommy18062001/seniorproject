@@ -6,6 +6,10 @@ import { UserContext } from "../../UserContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IsScrolledInterface, UserContextInterface } from "../../Interfaces";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../components/firebase";
+
+// firebase upload
 
 export default function AccountEditPage() {
   const {setIsScrolled} = useOutletContext() as IsScrolledInterface;
@@ -67,14 +71,24 @@ export default function AccountEditPage() {
   async function uploadPic(e: React.SyntheticEvent) {
     const target = e.target as HTMLFormElement;
     const files = target.files;
-    console.log(files[0]);
-    const data = new FormData();
-    data.append("profilePic", files[0]);
 
-    const { data: filename } = await axios.post("/upload", data, {
-      headers: { "Content-type": "multipart/form-data" },
-    });
-    setProfilePic(filename);
+    const imageRef = ref(storage, 'profile/'+ files[0].name.replace(" ", ""));
+    uploadBytes(imageRef, files[0]).then((response)=> {
+      toast.success("The image has been uploaded", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      getDownloadURL(response.ref).then((url)=> {
+        console.log(url);
+        setProfilePic(url);
+      })
+    })
   }
 
   // if the user info are not fetched yet don't show the page yet
@@ -103,7 +117,7 @@ export default function AccountEditPage() {
           <label>Upload a Profile Picture</label>
           <img
             className="my-2 w-40 h-40 object-cover"
-            src={"https://fanilotour.onrender.com/uploads/" + profilePic}
+            src={profilePic}
             alt=""
           />
           <input

@@ -23,7 +23,7 @@ const Review = require("./models/Review");
 const Booking = require("./models/Booking");
 
 const corsOptions = {
-  origin: ["https://fanilotour.vercel.app"],
+  origin: true,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -146,32 +146,32 @@ app.put("/userData", async (req, res) => {
 
 //**************************************************PICTURES UPLOAD*************************************************//
 // user profile Picture Upload
-const uploadMiddleware = multer({ dest: "uploads/" });
-app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
-  const { originalname, path } = req.file;
+// const uploadMiddleware = multer({ dest: "uploads/" });
+// app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
+//   const { originalname, path } = req.file;
 
-  // grab the extension of the file
-  const splittedName = originalname.split(".");
-  const ext = splittedName[splittedName.length - 1];
+//   // grab the extension of the file
+//   const splittedName = originalname.split(".");
+//   const ext = splittedName[splittedName.length - 1];
 
-  const newPath = path + "." + ext;
-  fs.renameSync(path, newPath);
-  res.json(newPath.replace("uploads\\", ""));
-});
+//   const newPath = path + "." + ext;
+//   fs.renameSync(path, newPath);
+//   res.json(newPath.replace("uploads\\", ""));
+// });
 
 // place photos upload
-app.post("/uploadPhotos", uploadMiddleware.array("photos", 50), (req, res) => {
-  const uploadedPhotos = [];
-  for (let i = 0; i < req.files.length; i++) {
-    const { originalname, path } = req.files[i];
-    const splittedName = originalname.split(".");
-    const ext = splittedName[splittedName.length - 1];
-    const newPath = path + "." + ext;
-    fs.renameSync(path, newPath);
-    uploadedPhotos.push(newPath.replace("uploads\\", ""));
-  }
-  res.json(uploadedPhotos);
-});
+// app.post("/uploadPhotos", uploadMiddleware.array("photos", 50), (req, res) => {
+//   const uploadedPhotos = [];
+//   for (let i = 0; i < req.files.length; i++) {
+//     const { originalname, path } = req.files[i];
+//     const splittedName = originalname.split(".");
+//     const ext = splittedName[splittedName.length - 1];
+//     const newPath = path + "." + ext;
+//     fs.renameSync(path, newPath);
+//     uploadedPhotos.push(newPath.replace("uploads\\", ""));
+//   }
+//   res.json(uploadedPhotos);
+// });
 
 // delete image
 app.delete("/delete/:filename", (req, res) => {

@@ -50,7 +50,7 @@ export default function ReviewItem({ reviewData, isTestimonials = false }: Revie
         <div className="flex gap-2 justify-center items-center w-full mb-2 relative">
           <img
             className="w-12 h-12 rounded-full object-cover"
-            src={"https://fanilotour.onrender.com/uploads/" + user?.profilePic}
+            src={user?.profilePic}
             alt={user?.profilePic}
           />
           <section className="h-full text-left">
@@ -67,7 +67,7 @@ export default function ReviewItem({ reviewData, isTestimonials = false }: Revie
       <div className="flex gap-2 items-start mb-2">
         <img
           className="w-12 h-12 rounded-full object-cover"
-          src={"https://fanilotour.onrender.com/uploads/" + user?.profilePic}
+          src={user?.profilePic}
           alt={user?.profilePic}
         />
         <div className="flex justify-between w-full">

@@ -40,7 +40,7 @@ export default function PlaceItem({ placeData, isList = false }: PlaceItemIntert
       >
         <img
           className="w-full h-full object-cover col-start-1 row-span-3"
-          src={"https://fanilotour.onrender.com/uploads/" + placeData.photos[0]}
+          src={placeData.photos[0]}
           alt={placeData.photos[0]}
         />
         <div className="w-full flex flex-col gap-2 items-start justify-between mt-2 ml-2 col-start-2">
@@ -79,7 +79,7 @@ export default function PlaceItem({ placeData, isList = false }: PlaceItemIntert
     >
       <img
         className="w-full h-52 object-cover rounded-t-md"
-        src={"https://fanilotour.onrender.com/uploads/" + placeData.photos[0]}
+        src={placeData.photos[0]}
         alt={placeData.photos[0]}
       />
       <div className="w-full flex justify-between mt-2 p-2 ">
