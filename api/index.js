@@ -44,7 +44,6 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 // fix cors permission
 app.use(cors(corsOptions));
 
-
 //**************************************************ACCOUNT AUTH*************************************************//
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
@@ -55,7 +54,7 @@ app.post("/signup", async (req, res) => {
       email,
       password: bcrypt.hashSync(password, bcryptSalt),
       isAdmin: false,
-      profilePic: "placeholder.png"
+      profilePic: "placeholder.png",
     });
     res.json(userDoc);
   } catch (e) {
@@ -78,7 +77,13 @@ app.post("/signin", async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(userDoc);
+          res
+            .cookie("token", token, {
+              httpOnly: true,
+              path: "/",
+              maxAge: 30 * 24 * 60 * 60 * 1000, // 30days
+            })
+            .json(userDoc);
         }
       );
     } else {
@@ -143,7 +148,6 @@ app.put("/userData", async (req, res) => {
   }
 });
 
-
 //**************************************************PICTURES UPLOAD*************************************************//
 // delete image
 app.delete("/delete/:filename", (req, res) => {
@@ -172,7 +176,7 @@ app.post("/newPlace", (req, res) => {
     if (err) throw err;
 
     // at this point we should get the user information
-    console.log("i finally got here")
+    console.log("i finally got here");
     const placeDoc = await Place.create({
       owner: userData.id,
       title,
@@ -249,7 +253,6 @@ app.delete("/placeData/:id", async (req, res) => {
   res.status(202).json("Place Deleted Successfully");
 });
 
-
 //**************************************************REVIEW ENDPOINTS*************************************************//
 app.get("/reviewData", async (req, res) => {
   const reviewData = await Review.find();
@@ -296,9 +299,9 @@ app.post("/newBooking", (req, res) => {
   const { token } = req.cookies;
 
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    console.log("here i got authenticated")
+    console.log("here i got authenticated");
     if (err) throw err;
-    console.log("I passed the error")
+    console.log("I passed the error");
     const bookingDoc = await Booking.create({
       owner: userData.id,
       placeId: id,
@@ -308,7 +311,7 @@ app.post("/newBooking", (req, res) => {
       price,
       isCancelled: false,
     });
-    console.log("i am all done here")
+    console.log("i am all done here");
     res.json(bookingDoc);
   });
 });
