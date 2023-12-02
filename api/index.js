@@ -296,7 +296,9 @@ app.post("/newBooking", (req, res) => {
   const { token } = req.cookies;
 
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    console.log("here i got authenticated")
     if (err) throw err;
+    console.log("I passed the error")
     const bookingDoc = await Booking.create({
       owner: userData.id,
       placeId: id,
@@ -306,6 +308,7 @@ app.post("/newBooking", (req, res) => {
       price,
       isCancelled: false,
     });
+    console.log("i am all done here")
     res.json(bookingDoc);
   });
 });
