@@ -145,34 +145,6 @@ app.put("/userData", async (req, res) => {
 
 
 //**************************************************PICTURES UPLOAD*************************************************//
-// user profile Picture Upload
-// const uploadMiddleware = multer({ dest: "uploads/" });
-// app.post("/upload", uploadMiddleware.single("profilePic"), (req, res) => {
-//   const { originalname, path } = req.file;
-
-//   // grab the extension of the file
-//   const splittedName = originalname.split(".");
-//   const ext = splittedName[splittedName.length - 1];
-
-//   const newPath = path + "." + ext;
-//   fs.renameSync(path, newPath);
-//   res.json(newPath.replace("uploads\\", ""));
-// });
-
-// place photos upload
-// app.post("/uploadPhotos", uploadMiddleware.array("photos", 50), (req, res) => {
-//   const uploadedPhotos = [];
-//   for (let i = 0; i < req.files.length; i++) {
-//     const { originalname, path } = req.files[i];
-//     const splittedName = originalname.split(".");
-//     const ext = splittedName[splittedName.length - 1];
-//     const newPath = path + "." + ext;
-//     fs.renameSync(path, newPath);
-//     uploadedPhotos.push(newPath.replace("uploads\\", ""));
-//   }
-//   res.json(uploadedPhotos);
-// });
-
 // delete image
 app.delete("/delete/:filename", (req, res) => {
   const { filename } = req.params;
@@ -200,6 +172,7 @@ app.post("/newPlace", (req, res) => {
     if (err) throw err;
 
     // at this point we should get the user information
+    console.log("i finally got here")
     const placeDoc = await Place.create({
       owner: userData.id,
       title,

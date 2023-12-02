@@ -91,6 +91,7 @@ export default function PlaceEditPage() {
       });
       setTimeout(() => setRedirect(true), 2000);
     } else {
+      console.log("i am here")
       await axios.post("/newPlace", placeData);
       toast.success("Place Added Successfully", {
         position: "top-right",
