@@ -16,7 +16,7 @@ import AboutPage from "./pages/AboutPage";
 import BookingEditPage from "./pages/bookings/BookingEditPage";
 import DestinationsPage from "./pages/places/DestinationsPage";
 
-axios.defaults.baseURL = "https://fanilo-tour.onrender.com/";
+axios.defaults.baseURL = "https://fanilotour.onrender.com/";
 axios.defaults.withCredentials = true;
 
 // for each route we have path and element
