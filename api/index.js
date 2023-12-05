@@ -66,14 +66,14 @@ app.post("/signin", async (req, res) => {
   const { email, password } = req.body;
   const userDoc = await User.findOne({ email });
 
-  console.log("Inside the signin endpoint")
+  console.log("Inside the signin endpoint");
   if (userDoc) {
     // if the user exists, check if the password is correct
-    console.log("UserDoc Okay")
+    console.log("UserDoc Okay");
     const passwordOk = bcrypt.compareSync(password, userDoc.password);
     if (passwordOk) {
       // use jwt to login
-      console.log("pass is okay")
+      console.log("pass is okay");
       jwt.sign(
         { email: userDoc.email, id: userDoc._id },
         jwtSecret,
@@ -85,7 +85,8 @@ app.post("/signin", async (req, res) => {
               httpOnly: false,
               path: "/",
               maxAge: 30 * 24 * 60 * 60 * 1000, // 30days,
-              sameSite: "None"
+              sameSite: "None",
+              secure: true,
             })
             .json(userDoc);
         }
