@@ -81,7 +81,8 @@ app.post("/signin", async (req, res) => {
             .cookie("token", token, {
               httpOnly: true,
               path: "/",
-              maxAge: 30 * 24 * 60 * 60 * 1000, // 30days
+              maxAge: 30 * 24 * 60 * 60 * 1000, // 30days,
+              sameSite: None,
             })
             .json(userDoc);
         }
