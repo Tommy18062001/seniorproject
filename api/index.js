@@ -82,7 +82,7 @@ app.post("/signin", async (req, res) => {
           if (err) throw err;
           res
             .cookie("token", token, {
-              httpOnly: true,
+              httpOnly: false,
               path: "/",
               maxAge: 30 * 24 * 60 * 60 * 1000, // 30days,
               sameSite: "None"
