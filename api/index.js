@@ -101,7 +101,15 @@ app.post("/signin", async (req, res) => {
 
 app.post("/signout", (req, res) => {
   // reset the cookie
-  res.cookie("token", "").json(true);
+  res
+    .cookie("token", "", {
+      httpOnly: false,
+      path: "/",
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30days,
+      sameSite: "None",
+      secure: true,
+    })
+    .json(true);
 });
 
 //**************************************************USER ENDPOINTS*************************************************//
