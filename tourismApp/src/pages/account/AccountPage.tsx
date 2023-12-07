@@ -38,7 +38,7 @@ export default function AccountPage() {
     "max-w-[225px] lg:max-w-full flex flex-col items-center justify-center gap-4 p-2 aspect-square border border-gray-400 text-center cursor-pointer";
   return (
     <div className="mt-32 w-3/4 mx-auto relative">
-      <div className="grid grid-cols-2 md:grid-cols-[1fr_2fr] place-items-center border-b p-4 w-5/6 md:w-4/5 mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1fr_2fr] place-items-center border-b p-4 w-5/6 md:w-4/5 mx-auto">
         {/* picture */}
         <img
           className=" w-40 h-40 rounded-full object-cover"
@@ -48,8 +48,8 @@ export default function AccountPage() {
         {/* description */}
         <div className="w-full h-full flex flex-col justify-between p-2">
           <div className="">
-            <h1 className="capitalize text-2xl mb-2">{user?.name}</h1>
-            <p className="text-gray-800 flex gap-2">
+            <h1 className="capitalize text-2xl mb-2 text-center sm:text-left">{user?.name}</h1>
+            <p className="text-gray-800 flex gap-2 justify-center sm:justify-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -67,7 +67,7 @@ export default function AccountPage() {
               {user?.email}
             </p>
           </div>
-          <div className="flex  gap-2">
+          <div className="flex gap-2 mt-4 sm:mt-auto justify-center sm:justify-start">
             <Link
               className="btn-primary w-32 text-center"
               to={"/account/" + user?._id}

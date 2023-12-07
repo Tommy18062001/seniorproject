@@ -20,16 +20,16 @@ export default function Header({ isScrolled = true }) {
     <header className={defaultStyle}>
       {/* logo */}
       <Link to={"/"} className="flex gap-2 items-center cursor-pointer ml-4">
-        <img src={logo} alt="logo" className=" w-16 h-16" />
-        <p className="text-4xl logoFont mt-2">Fanilo Tour</p>
+        <img src={logo} alt="logo" className="w-14 h-14 sm:w-16 sm:h-16" />
+        <p className="text-3xl sm:text-4xl logoFont mt-2">Fanilo Tour</p>
       </Link>
 
       {/* navigation */}
       <nav className="flex gap-1 items-center mr-4">
-        <Link to={"/destinations"} className="mr-4">
+        <Link to={"/destinations"} className="hidden sm:block mr-4">
           Explore Destinations
         </Link>
-        <span>|</span>
+        <span className="hidden sm:block">|</span>
         {user ? (
           <Link
             to={"/account"}

@@ -148,7 +148,7 @@ export default function HomePage() {
               ))}
         </div>
 
-        <Link to={"/destinations"} className="block btn-primary w-max">
+        <Link to={"/destinations"} className="block btn-primary w-max mx-auto">
           See More
         </Link>
       </div>
@@ -238,7 +238,7 @@ export default function HomePage() {
             Send a message
           </Link>
         </section>
-        <img src={image} alt="image" className=" max-w-[350px] h-auto" />
+        <img src={image} alt="image" className=" w-4/5 max-w-[350px] h-auto" />
       </div>
 
       {/* button to help the user scroll up  */}

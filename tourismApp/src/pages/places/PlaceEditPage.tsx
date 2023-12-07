@@ -129,7 +129,7 @@ export default function PlaceEditPage() {
   }
 
   return (
-    <div className="mt-32 w-2/4 mx-auto relative">
+    <div className="mt-32 w-3/4 lg:w-2/4 mx-auto relative">
       <h1 className="text-2xl mx-auto mb-8 w-full text-center">
         Add New Place
       </h1>

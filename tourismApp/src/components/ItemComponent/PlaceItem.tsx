@@ -50,7 +50,7 @@ export default function PlaceItem({ placeData, isList = false }: PlaceItemIntert
             <p className="px-2 border border-gray-500">Animal</p>
           </div>
         </div>
-        <p className="text-gray-700 text-sm mt-2 text-start px-2 col-start-1 md:col-start-2 col-span-3 
+        <p className="text-gray-700 text-xs sm:text-sm mt-2 text-start px-2 col-start-1 md:col-start-2 col-span-4 
        row-start-2 overflow-hidden">
           {placeData.description}
         </p>

@@ -37,11 +37,11 @@ export default function PlacesPage() {
               <span>
                 <AiOutlineAppstoreAdd className="text-xl" />
               </span>
-              Add Place
+              <span className="hidden sm:block">Add Place</span>
             </Link>
           </li>
-          <li className="p-2 border border-gray-500 rounded-full flex gap-1 items-center text-sm">
-            Total Records:
+          <li className="w-[38px] sm:w-auto p-2 border border-gray-500 rounded-full flex gap-1 items-center justify-center text-sm">
+            <span className="hidden sm:block">Total Records:</span>
             <span> {places.length} </span>
           </li>
         </ul>
