@@ -26,10 +26,9 @@ import { LiaAccessibleIcon } from "react-icons/lia";
 import { RxActivityLog } from "react-icons/rx";
 import { IsScrolledInterface, ReviewInterface } from "../Interfaces";
 
-
-
 export default function HomePage() {
-  const {isScrolled, setIsScrolled} = useOutletContext() as IsScrolledInterface;
+  const { isScrolled, setIsScrolled } =
+    useOutletContext() as IsScrolledInterface;
 
   const [placeList, setPlaceList] = useState([]);
   const [reviews, setReviews] = useState<ReviewInterface[]>([]);
@@ -144,10 +143,14 @@ export default function HomePage() {
           {placeList.length > 0 &&
             placeList
               .slice(0, 3)
-              .map((place, i) => <PlaceItem placeData={place} key={i} isList={false} />)}
+              .map((place, i) => (
+                <PlaceItem placeData={place} key={i} isList={false} />
+              ))}
         </div>
 
-        <button className="btn-primary">See more</button>
+        <Link to={"/destinations"} className="block btn-primary w-max">
+          See More
+        </Link>
       </div>
 
       {/* What we do */}
@@ -209,7 +212,10 @@ export default function HomePage() {
             {reviews.length > 0 &&
               reviews.map((review, i) =>
                 review.rating > 3 ? (
-                  <SwiperSlide key={i} className="px-2 py-5 mt-4 flex flex-col justify-center items-center h-[400px]">
+                  <SwiperSlide
+                    key={i}
+                    className="px-2 py-5 mt-4 flex flex-col justify-center items-center h-[400px]"
+                  >
                     <ReviewItem reviewData={review} isTestimonials={true} />
                   </SwiperSlide>
                 ) : null
@@ -238,7 +244,9 @@ export default function HomePage() {
       {/* button to help the user scroll up  */}
       <button
         onClick={() => {
-          document.getElementById("top")?.scrollIntoView({ behavior: "smooth" });
+          document
+            .getElementById("top")
+            ?.scrollIntoView({ behavior: "smooth" });
         }}
         className="fixed bottom-[50px] right-10 p-2 bg-primary border border-white text-white
          text-2xl hover:-translate-y-2 transition-all duration-150 z-10"
