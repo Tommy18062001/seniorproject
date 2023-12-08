@@ -8,11 +8,11 @@ import { useInView } from "react-intersection-observer";
 
 import { BsArrowUp, BsShieldCheck } from "react-icons/bs";
 
-import image1 from "../assets/image1.jpg";
-import image2 from "../assets/image2.jpg";
-import image3 from "../assets/image3.jpg";
-import fanilo from "../assets/fanilo.jpg";
-import image from "../assets/image.jpg";
+import image1 from "../assets/image1.webp";
+import image2 from "../assets/image2.webp";
+import image3 from "../assets/image3.webp";
+import fanilo from "../assets/fanilo.webp";
+import image from "../assets/image.webp";
 
 import "swiper/css";
 import "swiper/css/pagination";

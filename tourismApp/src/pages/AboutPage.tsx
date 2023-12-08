@@ -1,5 +1,5 @@
 import { useOutletContext } from "react-router-dom";
-import team from "../assets/faniloteam.jpg";
+import team from "../assets/faniloteam.webp";
 import { RiTeamLine } from "react-icons/ri";
 import { BiNetworkChart } from "react-icons/bi";
 import { HiInformationCircle } from "react-icons/hi";
