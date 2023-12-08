@@ -57,7 +57,7 @@ export default function HomePage() {
 
     axios.get("/reviewData/top").then((reviewData) => {
       setReviews(reviewData.data);
-      setTimeout(() => setReviewsReady(true), 1000);
+      setReviewsReady(true)
     });
   }, []);
 

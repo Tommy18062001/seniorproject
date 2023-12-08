@@ -18,7 +18,7 @@ export default function BookingsPage({ isUserAdmin = false }) {
     if (isUserAdmin) {
       axios.get("/bookingsData").then(({ data }) => {
         setBookings(data);
-        setTimeout(() => setReady(true), 1000);
+        setReady(true);
       });
     } else {
       axios.get("/bookingsData/" + id).then(({ data }) => {
