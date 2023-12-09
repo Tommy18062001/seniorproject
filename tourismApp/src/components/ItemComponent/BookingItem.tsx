@@ -192,7 +192,7 @@ export default function BookingItem({ bookingData, isUserAdmin = false }: Bookin
           <p className={textDisplay}>
             <ImCancelCircle /> Free Cancellation: {cancellationStatus}
           </p>
-          <p className={textDisplay + " w-max"}>
+          <p className={textDisplay + " w-max flex-col sm:flex-row"}>
             <span className="flex gap-2 items-center">
               <BsCalendarCheck /> Appointment Date: {bookingData.selectedDate}
             </span>
