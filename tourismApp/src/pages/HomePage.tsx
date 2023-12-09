@@ -96,7 +96,7 @@ export default function HomePage() {
           </SwiperSlide>{" "}
         </Swiper>
         <span className="hidden newmd:block absolute top-0 left-0 w-full h-full bg-black opacity-25 z-30"></span>
-        <h1 className="uppercase text-4xl mt-16 lg:mt-0 newmd:text-6xl lg:text-7xl font-bold z-40">
+        <h1 className="uppercase text-4xl mt-16 lg:mt-0 newmd:text-6xl lg:text-5xl font-bold z-40">
           Welcome to Fanilo Tour
         </h1>
         <p className="z-30 text-md">Explore the beauty of toamasina</p>
